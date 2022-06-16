@@ -1258,7 +1258,7 @@ class PlayState extends MusicBeatState
 		amongus.scrollFactor.set();
 		amongus.borderSize = 1.25;
 		amongus.alpha = 0;
-		if (FlxG.random.bool(0.01)){ // 100% chance of showing
+		if (FlxG.random.bool(0.01)){ // 1 / 1000 chance of showing
 			add(amongus);
 			itAppeard = true;
 		}
