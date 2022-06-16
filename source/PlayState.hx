@@ -3081,11 +3081,16 @@ class PlayState extends MusicBeatState
 			scoreTxt.text += ' (' + convertedAccDisplay + '%)' + ' - [' + ratingFC + ']';
 		}
 
-		if (ClientPrefs.kadeEngineTxt){
+		if (ClientPrefs.kadeEngineTxt && !ClientPrefs.boomEffect){
 			if (ratingName == '?')
 				scoreTxt.text = 'Score: ' + songScore + ' | Combo Breaks: ' + songMisses + ' | Accuracy: 0 % | N/A';
 			else
 				scoreTxt.text = 'Score: ' + songScore + ' | Combo Breaks: ' + songMisses + ' | Accuracy: ' + convertedAccDisplay + ' %' + ' | (' + ratingFC + ')';
+		}else if (ClientPrefs.kadeEngineTxt && ClientPrefs.boomEffect){
+			if (ratingName == '?')
+				scoreTxt.text = 'Score: ' + songScore + ' | Vine Booms: ' + songMisses + ' | Accuracy: 0 % | N/A';
+			else
+				scoreTxt.text = 'Score: ' + songScore + ' | Vine Booms: ' + songMisses + ' | Accuracy: ' + convertedAccDisplay + ' %' + ' | (' + ratingFC + ')';
 		}
 		if (ClientPrefs.healthVisible)
 			scoreTxt.text += ' | ' + 'Health: ' + healthBar.percent + '%';
