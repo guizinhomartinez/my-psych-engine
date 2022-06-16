@@ -194,8 +194,9 @@ class PlayState extends MusicBeatState
 	public var cpuControlled:Bool = false;
 	public var practiceMode:Bool = false;
 	private var itAppeard:Bool = false;
-	private var omgIcons:Bool = false;
+	private var omgIcons:Bool = true;
 	public var sleeping:Bool = false;
+	public var playingTheSound:Bool = false;
 
 	public var botplaySine:Float = 0;
 	public var botplayTxt:FlxText;
@@ -2364,8 +2365,11 @@ class PlayState extends MusicBeatState
 
 		if(paused) {
 			//trace('Oopsie doopsie! Paused sound');
+			sleep.pause();
 			FlxG.sound.music.pause();
 			vocals.pause();
+		}else if (sleeping){
+			sleep.play();
 		}
 
 		// Song duration in a float, useful for the time left feature
@@ -2691,6 +2695,7 @@ class PlayState extends MusicBeatState
 		{
 			if (FlxG.sound.music != null)
 			{
+				sleep.play();
 				FlxG.sound.music.pause();
 				vocals.pause();
 			}
@@ -2823,12 +2828,13 @@ class PlayState extends MusicBeatState
 	function playSound(twn:FlxTween):Void {
 		sleep = new FlxSound().loadEmbedded(Paths.sound('bf-sleeping'), true);
 		sleep.play();
+		playingTheSound=true;
 	}
 
 	override public function update(elapsed:Float)
 	{
 		if (FlxG.keys.justPressed.COMMA){
-			omgIcons=true;
+			omgIcons=false;
 		}
 
 		if (FlxG.keys.justPressed.Y) bounce=true;
@@ -2869,22 +2875,25 @@ class PlayState extends MusicBeatState
 			//trace('OMG'); // i was going insane with this code ;-;
 			FlxTween.tween(amongus, {alpha: 1}, 2, {onComplete: changeAmongusY}); // makes it appear slowly instead of just popping
 		}
+		#if eu_tico_tico
 		if (FlxG.keys.justPressed.E){
-			sleeping=false;
+			sleeping=true;
 			FlxTween.tween(boyfriend, {angle: 90}, 2, {onComplete: playSound});
 			FlxTween.tween(cama, {x: boyfriend.x - 300}, 1);
 			FlxTween.tween(cama, {y: boyfriend.y}, 1);
 			FlxTween.tween(cama, {alpha: 1}, 1);
 			vocals.volume = 0.5;
 		}else if (FlxG.keys.justPressed.R){
-			sleeping=true;
+			sleeping=false;
 			FlxTween.tween(boyfriend, {angle: 0}, 2);
 			FlxTween.tween(cama, {x: -5000}, 1);
 			FlxTween.tween(cama, {y: -1000}, 1);
 			FlxTween.tween(cama, {alpha: 0}, 1);
 			vocals.volume = 1;
 			sleep.stop();
+			playingTheSound=false;
 		}
+		#end
 		if (FlxG.keys.justPressed.N) {
 			twn = FlxTween.tween(boyfriend, {angle: 360}, 1, {type: LOOPING});
 			twn2 = FlxTween.tween(iconP1, {angle: 360}, 1, {type: LOOPING});
@@ -3138,7 +3147,8 @@ class PlayState extends MusicBeatState
 				}
 				else {*/
 				if(FlxG.sound.music != null) {
-					sleep.pause();
+					if (sleeping && playingTheSound)
+						sleep.pause();
 					FlxG.sound.music.pause();
 					vocals.pause();
 				}
@@ -3960,6 +3970,7 @@ class PlayState extends MusicBeatState
 		updateTime = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
+		sleep.pause();
 		vocals.pause();
 		var timeTotal:Int = Math.floor(songLength / 1000);
 		if (SONG.song.toLowerCase() == 'bopeebo' && isStoryMode)
@@ -4161,6 +4172,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 					var difficulty:String = CoolUtil.getDifficultyFilePath();
 
 					trace('LOADING NEXT SONG');
+					sleep.stop();
 					trace(Paths.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);
 
 					var winterHorrorlandNext = (Paths.formatToSongPath(SONG.song) == "eggnog");
@@ -4203,6 +4215,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 					CustomFadeTransition.nextCamera = null;
 				}
 				MusicBeatState.switchState(new FreeplayState());
+				sleep.stop();
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				changedDifficulty = false;
 			}
@@ -4866,7 +4879,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 			}
 			health += note.hitHealth;
 
-			if(!note.noAnimation || !sleeping) {
+			if(!note.noAnimation && !sleeping) {
 				var daAlt = '';
 				if(note.noteType == 'Alt Animation') daAlt = '-alt';
 	
@@ -5257,7 +5270,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 					timeBarBG.sprTracker = timeBar;
 					timeBar.cameras = [camHUD];
 				}
-		} else if (curBeat % 3 == 0){
+		} else if (curBeat % 4 == 0){
 				if (randomint == 1){
 					remove(timeBar);
 					timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
