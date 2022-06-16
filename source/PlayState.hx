@@ -3092,6 +3092,7 @@ class PlayState extends MusicBeatState
 			else
 				scoreTxt.text = 'Score: ' + songScore + ' | Vine Booms: ' + songMisses + ' | Accuracy: ' + convertedAccDisplay + ' %' + ' | (' + ratingFC + ')';
 		}
+		//a
 		if (ClientPrefs.healthVisible)
 			scoreTxt.text += ' | ' + 'Health: ' + healthBar.percent + '%';
 
