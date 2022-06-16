@@ -194,7 +194,8 @@ class PlayState extends MusicBeatState
 	public var cpuControlled:Bool = false;
 	public var practiceMode:Bool = false;
 	private var itAppeard:Bool = false;
-	private var sleeping:Bool = false;
+	private var omgIcons:Bool = false;
+	public var sleeping:Bool = false;
 
 	public var botplaySine:Float = 0;
 	public var botplayTxt:FlxText;
@@ -257,6 +258,7 @@ class PlayState extends MusicBeatState
 	public var scoreTxt:FlxText;
 	public var amongus:FlxText;
 	public var stuffTxt:FlxText;
+	var cama:FlxSprite;
 	var timeTxt:FlxText;
 	var scoreTxtTween:FlxTween;
 	var camtween:FlxTween;
@@ -1256,10 +1258,15 @@ class PlayState extends MusicBeatState
 		amongus.scrollFactor.set();
 		amongus.borderSize = 1.25;
 		amongus.alpha = 0;
-		if (FlxG.random.bool(100)){ // 100% chance of showing
+		if (FlxG.random.bool(0.01)){ // 100% chance of showing
 			add(amongus);
 			itAppeard = true;
 		}
+
+		cama = new FlxSprite().loadGraphic(Paths.image('cama', 'shared'));
+		cama.x -= 5000;
+		cama.alpha=0;
+		add(cama);
 
 		pau = new FlxSprite().loadGraphic(Paths.image('bad', 'shared'));
 		pau.x -= 5000;
@@ -2816,16 +2823,14 @@ class PlayState extends MusicBeatState
 	function playSound(twn:FlxTween):Void {
 		sleep = new FlxSound().loadEmbedded(Paths.sound('bf-sleeping'), true);
 		sleep.play();
-		vocals.volume = 0;
-	}
-
-	function playSound2(twn:FlxTween):Void {
-		sleep.stop();
-		vocals.volume = 1;
 	}
 
 	override public function update(elapsed:Float)
 	{
+		if (FlxG.keys.justPressed.COMMA){
+			omgIcons=true;
+		}
+
 		if (FlxG.keys.justPressed.Y) bounce=true;
 		else if (FlxG.keys.justPressed.H) bounce=false; iconP1.angle=0; iconP2.angle=0;
 
@@ -2865,11 +2870,20 @@ class PlayState extends MusicBeatState
 			FlxTween.tween(amongus, {alpha: 1}, 2, {onComplete: changeAmongusY}); // makes it appear slowly instead of just popping
 		}
 		if (FlxG.keys.justPressed.E){
-			sleeping=true;
-			FlxTween.tween(boyfriend, {angle: 90}, 2, {onComplete: playSound}); // makes it appear slowly instead of just popping
-		}else if (FlxG.keys.justPressed.R){
 			sleeping=false;
-			FlxTween.tween(boyfriend, {angle: 0}, 2, {onComplete: playSound2}); // makes it appear slowly instead of just popping
+			FlxTween.tween(boyfriend, {angle: 90}, 2, {onComplete: playSound});
+			FlxTween.tween(cama, {x: boyfriend.x - 300}, 1);
+			FlxTween.tween(cama, {y: boyfriend.y}, 1);
+			FlxTween.tween(cama, {alpha: 1}, 1);
+			vocals.volume = 0.5;
+		}else if (FlxG.keys.justPressed.R){
+			sleeping=true;
+			FlxTween.tween(boyfriend, {angle: 0}, 2);
+			FlxTween.tween(cama, {x: -5000}, 1);
+			FlxTween.tween(cama, {y: -1000}, 1);
+			FlxTween.tween(cama, {alpha: 0}, 1);
+			vocals.volume = 1;
+			sleep.stop();
 		}
 		if (FlxG.keys.justPressed.N) {
 			twn = FlxTween.tween(boyfriend, {angle: 360}, 1, {type: LOOPING});
@@ -3081,19 +3095,19 @@ class PlayState extends MusicBeatState
 			scoreTxt.text += ' (' + convertedAccDisplay + '%)' + ' - [' + ratingFC + ']';
 		}
 
-		if (ClientPrefs.kadeEngineTxt && !ClientPrefs.boomEffect){
+		if (ClientPrefs.kadeEngineTxt && !ClientPrefs.boomEffect){ //if its kade engine score and its NOT boom effect then
 			if (ratingName == '?')
 				scoreTxt.text = 'Score: ' + songScore + ' | Combo Breaks: ' + songMisses + ' | Accuracy: 0 % | N/A';
 			else
 				scoreTxt.text = 'Score: ' + songScore + ' | Combo Breaks: ' + songMisses + ' | Accuracy: ' + convertedAccDisplay + ' %' + ' | (' + ratingFC + ')';
-		}else if (ClientPrefs.kadeEngineTxt && ClientPrefs.boomEffect){
+		}else if (ClientPrefs.kadeEngineTxt && ClientPrefs.boomEffect){ //if its kade engine score and it IS boom effect then
 			if (ratingName == '?')
 				scoreTxt.text = 'Score: ' + songScore + ' | Vine Booms: ' + songMisses + ' | Accuracy: 0 % | N/A';
 			else
 				scoreTxt.text = 'Score: ' + songScore + ' | Vine Booms: ' + songMisses + ' | Accuracy: ' + convertedAccDisplay + ' %' + ' | (' + ratingFC + ')';
 		}
 		//a
-		if (ClientPrefs.healthVisible)
+		if (ClientPrefs.healthVisible) // if health thing is ON then
 			scoreTxt.text += ' | ' + 'Health: ' + healthBar.percent + '%';
 
 		stuffTxt.text = 'Total Note Hits: ' + songHits + '\nMax Combo: ' + maxCombo + '\nCombo: ' + combo + '\nSicks: ' + sicks + '\nGoods: ' + goods +  '\nBads: ' + bads + '\nShits: ' + shits;
@@ -4768,8 +4782,6 @@ BUT NOW THE SONG LIST HAS MY TUNE
 		} else if(!note.noAnimation) {
 			var altAnim:String = "";
 
-			sleeping=true;
-
 			var curSection:Int = Math.floor(curStep / 16);
 			if (SONG.notes[curSection] != null)
 			{
@@ -4854,8 +4866,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 			}
 			health += note.hitHealth;
 
-			if(!note.noAnimation) {
-				sleeping=true;
+			if(!note.noAnimation || !sleeping) {
 				var daAlt = '';
 				if(note.noteType == 'Alt Animation') daAlt = '-alt';
 	
@@ -5233,30 +5244,32 @@ BUT NOW THE SONG LIST HAS MY TUNE
 
 		var showTime:Bool = (ClientPrefs.timeBarType != 'Disabled');
 
-		switch (randomint)
-		{
-			case 0:
-				remove(timeBar);
-				timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
-				'songPercent', 0, 1);
-				timeBar.scrollFactor.set();
-				timeBar.createFilledBar(0xFF000000, FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
-				timeBar.numDivisions = 800;
-				timeBar.visible = showTime;
-				add(timeBar);
-				timeBarBG.sprTracker = timeBar;
-				timeBar.cameras = [camHUD];
-			case 1:
-				remove(timeBar);
-				timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
-				'songPercent', 0, 1);
-				timeBar.scrollFactor.set();
-				timeBar.createFilledBar(0xFF000000, FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]));
-				timeBar.numDivisions = 800;
-				timeBar.visible = showTime;
-				add(timeBar);
-				timeBarBG.sprTracker = timeBar;
-				timeBar.cameras = [camHUD];
+		if (curBeat % 2 == 0){
+				if (randomint == 0){
+					remove(timeBar);
+					timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
+					'songPercent', 0, 1);
+					timeBar.scrollFactor.set();
+					timeBar.createFilledBar(0xFF000000, FlxColor.fromRGB(dad.healthColorArray[0], dad.healthColorArray[1], dad.healthColorArray[2]));
+					timeBar.numDivisions = 800;
+					timeBar.visible = showTime;
+					add(timeBar);
+					timeBarBG.sprTracker = timeBar;
+					timeBar.cameras = [camHUD];
+				}
+		} else if (curBeat % 3 == 0){
+				if (randomint == 1){
+					remove(timeBar);
+					timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
+					'songPercent', 0, 1);
+					timeBar.scrollFactor.set();
+					timeBar.createFilledBar(0xFF000000, FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]));
+					timeBar.numDivisions = 800;
+					timeBar.visible = showTime;
+					add(timeBar);
+					timeBarBG.sprTracker = timeBar;
+					timeBar.cameras = [camHUD];
+				}
 		}
 
 		if (generatedMusic)
@@ -5292,8 +5305,20 @@ BUT NOW THE SONG LIST HAS MY TUNE
 			camHUD.zoom += 0.03 * camZoomingMult;
 		}
 
-		iconP1.scale.set(1.2, 1.2);
-		iconP2.scale.set(1.2, 1.2);
+		if (omgIcons){
+			if (curBeat % 1 == 0) {
+			
+				iconP1.scale.set(0.9, 0.9);
+				iconP2.scale.set(1.1, 1.1);
+			} if (curBeat % 2 == 0) {
+				iconP1.scale.set(1.1, 1.1);
+				iconP2.scale.set(0.9, 0.9);
+			}
+		} else {
+			iconP1.scale.set(1.2, 1.2);
+			iconP2.scale.set(1.2, 1.2);
+		}
+
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();

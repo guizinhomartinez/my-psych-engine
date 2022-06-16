@@ -130,6 +130,7 @@ class Note extends FlxSprite
 					hitCausesMiss = true;
 				case 'No Animation':
 					noAnimation = true;
+					//PlayState.sleeping = true;
 				case 'GF Sing':
 					gfNote = true;
 			}
