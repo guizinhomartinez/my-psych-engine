@@ -1,0 +1,13 @@
+function onUpdate()
+    if curStep == 1 then
+    for i=0, 3 do
+        setPropertyFromGroup('opponentStrums',i,'downScroll',true)
+	setPropertyFromGroup('opponentStrums',i,'y',550)
+    end
+    end
+    if curStep == 927 then
+    for i=0, 3 do
+        setPropertyFromGroup('opponentStrums',i,'downScroll',false)
+    end
+    end
+end

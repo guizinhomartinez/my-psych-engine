@@ -1,0 +1,41 @@
+{
+	"storyName": "SugarCrush Stairway",
+	"difficulties": "Hard, UCV",
+	"hideFreeplay": false,
+	"weekBackground": "crossroads",
+	"freeplayColor": [
+		146,
+		113,
+		253
+	],
+	"weekBefore": "",
+	"startUnlocked": true,
+	"weekCharacters": [
+		"",
+		"",
+		""
+	],
+	"songs": [
+		[
+			"Daydreaming",
+			"ena",
+			[
+				255,
+				213,
+				0
+			]
+		],
+		[
+			"Abstraction",
+			"ena",
+			[
+				0,
+				0,
+				255
+			]
+		]
+	],
+	"hideStoryMode": false,
+	"weekName": "",
+	"hiddenUntilUnlocked": false
+}

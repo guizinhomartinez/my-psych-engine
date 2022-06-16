@@ -1,0 +1,8 @@
+<?xml version='1.0' encoding='utf-8'?>
+<TextureAtlas imagePath="Alexx.png">
+<SubTexture name="Alexx Idle0000" x="0" y="0" width="602" height="771" frameX="0" frameY="-309" frameWidth="1920" frameHeight="1080" />
+<SubTexture name="Alexx Idle0001" x="602" y="0" width="599" height="781" frameX="0" frameY="-299" frameWidth="1920" frameHeight="1080" />
+<SubTexture name="Alexx Idle0002" x="0" y="781" width="597" height="787" frameX="0" frameY="-293" frameWidth="1920" frameHeight="1080" />
+<SubTexture name="Alexx Idle0003" x="597" y="781" width="594" height="792" frameX="0" frameY="-288" frameWidth="1920" frameHeight="1080" />
+<SubTexture name="Alexx Idle0004" x="0" y="1573" width="590" height="804" frameX="0" frameY="-276" frameWidth="1920" frameHeight="1080" />
+</TextureAtlas>

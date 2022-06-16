@@ -1,0 +1,61 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas imagePath="grey_ena.png">
+	<!-- Created with Adobe Animate version 21.0.5.40714 -->
+	<!-- http://www.adobe.com/products/animate.html -->
+	<SubTexture name="ena down0000" x="0" y="0" width="435" height="626"/>
+	<SubTexture name="ena down0001" x="435" y="0" width="435" height="626"/>
+	<SubTexture name="ena down0002" x="870" y="0" width="424" height="624" frameX="-3" frameY="0" frameWidth="435" frameHeight="626"/>
+	<SubTexture name="ena down0003" x="1294" y="0" width="424" height="624" frameX="-3" frameY="0" frameWidth="435" frameHeight="626"/>
+	<SubTexture name="ena down0004" x="1718" y="0" width="421" height="626" frameX="0" frameY="0" frameWidth="435" frameHeight="626"/>
+	<SubTexture name="ena down0005" x="2139" y="0" width="421" height="626" frameX="0" frameY="0" frameWidth="435" frameHeight="626"/>
+	<SubTexture name="ena down0006" x="2560" y="0" width="417" height="625" frameX="0" frameY="0" frameWidth="435" frameHeight="626"/>
+	<SubTexture name="ena down0007" x="2977" y="0" width="417" height="625" frameX="0" frameY="0" frameWidth="435" frameHeight="626"/>
+	<SubTexture name="ena down0008" x="3394" y="0" width="417" height="625" frameX="0" frameY="0" frameWidth="435" frameHeight="626"/>
+	<SubTexture name="ena idle grey0000" x="3811" y="0" width="379" height="620" frameX="-62" frameY="-5" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0001" x="4190" y="0" width="403" height="608" frameX="-41" frameY="-20" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0002" x="4593" y="0" width="423" height="621" frameX="-21" frameY="-11" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0003" x="5016" y="0" width="423" height="621" frameX="-21" frameY="-11" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0004" x="5439" y="0" width="422" height="624" frameX="-13" frameY="-9" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0005" x="5861" y="0" width="422" height="624" frameX="-13" frameY="-9" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0006" x="6283" y="0" width="424" height="623" frameX="-1" frameY="-18" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0007" x="6707" y="0" width="424" height="623" frameX="-1" frameY="-18" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0008" x="7131" y="0" width="417" height="623" frameX="-5" frameY="-18" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0009" x="7548" y="0" width="416" height="613" frameX="-1" frameY="-28" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0010" x="0" y="626" width="416" height="613" frameX="-1" frameY="-28" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0011" x="416" y="626" width="420" height="588" frameX="-11" frameY="-46" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0012" x="836" y="626" width="420" height="588" frameX="-11" frameY="-46" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0013" x="1256" y="626" width="367" height="572" frameX="-38" frameY="-49" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0014" x="1623" y="626" width="364" height="591" frameX="-45" frameY="-40" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0015" x="1987" y="626" width="364" height="591" frameX="-45" frameY="-40" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0016" x="2351" y="626" width="367" height="612" frameX="-54" frameY="-22" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0017" x="2718" y="626" width="367" height="612" frameX="-54" frameY="-22" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0018" x="3085" y="626" width="349" height="625" frameX="-69" frameY="-9" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena idle grey0019" x="3434" y="626" width="349" height="625" frameX="-69" frameY="-9" frameWidth="444" frameHeight="641"/>
+	<SubTexture name="ena left0000" x="3783" y="626" width="446" height="603" frameX="-1" frameY="-4" frameWidth="447" frameHeight="607"/>
+	<SubTexture name="ena left0001" x="4229" y="626" width="446" height="603" frameX="-1" frameY="-4" frameWidth="447" frameHeight="607"/>
+	<SubTexture name="ena left0002" x="4675" y="626" width="364" height="583" frameX="-29" frameY="-10" frameWidth="447" frameHeight="607"/>
+	<SubTexture name="ena left0003" x="5039" y="626" width="364" height="583" frameX="-29" frameY="-10" frameWidth="447" frameHeight="607"/>
+	<SubTexture name="ena left0004" x="5403" y="626" width="358" height="584" frameX="-30" frameY="0" frameWidth="447" frameHeight="607"/>
+	<SubTexture name="ena left0005" x="5761" y="626" width="358" height="584" frameX="-30" frameY="0" frameWidth="447" frameHeight="607"/>
+	<SubTexture name="ena left0006" x="6119" y="626" width="350" height="576" frameX="-29" frameY="-10" frameWidth="447" frameHeight="607"/>
+	<SubTexture name="ena left0007" x="6469" y="626" width="350" height="576" frameX="-29" frameY="-10" frameWidth="447" frameHeight="607"/>
+	<SubTexture name="ena left0008" x="6819" y="626" width="350" height="584" frameX="-29" frameY="-4" frameWidth="447" frameHeight="607"/>
+	<SubTexture name="ena right0000" x="7169" y="626" width="411" height="596" frameX="-31" frameY="0" frameWidth="448" frameHeight="603"/>
+	<SubTexture name="ena right0001" x="7580" y="626" width="411" height="596" frameX="-31" frameY="0" frameWidth="448" frameHeight="603"/>
+	<SubTexture name="ena right0002" x="0" y="1251" width="402" height="584" frameX="-45" frameY="-15" frameWidth="448" frameHeight="603"/>
+	<SubTexture name="ena right0003" x="402" y="1251" width="402" height="584" frameX="-45" frameY="-15" frameWidth="448" frameHeight="603"/>
+	<SubTexture name="ena right0004" x="804" y="1251" width="446" height="597" frameX="-2" frameY="-6" frameWidth="448" frameHeight="603"/>
+	<SubTexture name="ena right0005" x="1250" y="1251" width="446" height="597" frameX="-2" frameY="-6" frameWidth="448" frameHeight="603"/>
+	<SubTexture name="ena right0006" x="1696" y="1251" width="446" height="597" frameX="-2" frameY="-6" frameWidth="448" frameHeight="603"/>
+	<SubTexture name="ena right0007" x="2142" y="1251" width="446" height="597" frameX="-2" frameY="-6" frameWidth="448" frameHeight="603"/>
+	<SubTexture name="ena right0008" x="2588" y="1251" width="446" height="597" frameX="-2" frameY="-6" frameWidth="448" frameHeight="603"/>
+	<SubTexture name="ena up0000" x="3034" y="1251" width="425" height="596" frameX="0" frameY="-116" frameWidth="556" frameHeight="729"/>
+	<SubTexture name="ena up0001" x="3459" y="1251" width="426" height="636" frameX="-16" frameY="-83" frameWidth="556" frameHeight="729"/>
+	<SubTexture name="ena up0002" x="3885" y="1251" width="426" height="636" frameX="-16" frameY="-83" frameWidth="556" frameHeight="729"/>
+	<SubTexture name="ena up0003" x="4311" y="1251" width="501" height="729" frameX="-49" frameY="0" frameWidth="556" frameHeight="729"/>
+	<SubTexture name="ena up0004" x="4812" y="1251" width="501" height="729" frameX="-49" frameY="0" frameWidth="556" frameHeight="729"/>
+	<SubTexture name="ena up0005" x="5313" y="1251" width="508" height="729" frameX="-48" frameY="0" frameWidth="556" frameHeight="729"/>
+	<SubTexture name="ena up0006" x="5821" y="1251" width="508" height="729" frameX="-48" frameY="0" frameWidth="556" frameHeight="729"/>
+	<SubTexture name="ena up0007" x="6329" y="1251" width="498" height="727" frameX="-50" frameY="0" frameWidth="556" frameHeight="729"/>
+	<SubTexture name="ena up0008" x="6827" y="1251" width="498" height="727" frameX="-50" frameY="0" frameWidth="556" frameHeight="729"/>
+</TextureAtlas>

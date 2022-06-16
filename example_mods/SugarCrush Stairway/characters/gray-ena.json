@@ -1,0 +1,78 @@
+{
+	"animations": [
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "idle",
+			"indices": [],
+			"name": "ena idle grey"
+		},
+		{
+			"offsets": [
+				-17,
+				-35
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singLEFT",
+			"indices": [],
+			"name": "ena left"
+		},
+		{
+			"offsets": [
+				-48,
+				-36
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singDOWN",
+			"indices": [],
+			"name": "ena down"
+		},
+		{
+			"offsets": [
+				10,
+				-30
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singUP",
+			"indices": [],
+			"name": "ena up"
+		},
+		{
+			"offsets": [
+				0,
+				0
+			],
+			"loop": false,
+			"fps": 24,
+			"anim": "singRIGHT",
+			"indices": [],
+			"name": "ena right"
+		}
+	],
+	"no_antialiasing": false,
+	"image": "characters/gray_ena",
+	"position": [
+		-400,
+		-40
+	],
+	"healthicon": "ena",
+	"flip_x": false,
+	"healthbar_colors": [
+		0,
+		34,
+		98
+	],
+	"camera_position": [
+		0,
+		0
+	],
+	"sing_duration": 6.1,
+	"scale": 1
+}

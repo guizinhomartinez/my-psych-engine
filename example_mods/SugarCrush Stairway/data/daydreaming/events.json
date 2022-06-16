@@ -1,0 +1,69 @@
+{
+	"song": {
+		"speed": 3,
+		"stage": "daydream",
+		"player1": "nikku",
+		"player2": "ena",
+		"player3": null,
+		"events": [
+			[
+				60631.5789473684,
+				[
+					[
+						"Cam Boom Speed",
+						"2",
+						"1.5"
+					]
+				]
+			],
+			[
+				70736.8421052631,
+				[
+					[
+						"Cam Boom Speed",
+						"4",
+						"1"
+					]
+				]
+			],
+			[
+				116210.526315789,
+				[
+					[
+						"Cam Boom Speed",
+						"1",
+						"4"
+					]
+				]
+			],
+			[
+				136421.052631579,
+				[
+					[
+						"Cam Boom Speed",
+						"2",
+						"2"
+					]
+				]
+			],
+			[
+				146526.315789474,
+				[
+					[
+						"Cam Boom Speed",
+						"4",
+						"1"
+					]
+				]
+			]
+		],
+		"notes": [],
+		"splashSkin": null,
+		"validScore": false,
+		"gfVersion": "gf",
+		"bpm": 190,
+		"arrowSkin": null,
+		"needsVoices": true,
+		"song": "Daydreaming"
+	}
+}
