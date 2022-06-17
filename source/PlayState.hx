@@ -2365,12 +2365,16 @@ class PlayState extends MusicBeatState
 
 		if(paused) {
 			//trace('Oopsie doopsie! Paused sound');
+			#if eu_tico_tico
 			sleep.pause();
+			#end
 			FlxG.sound.music.pause();
 			vocals.pause();
-		}else if (sleeping){
-			sleep.play();
-		}
+		}	#if eu_tico_tico
+			else if (sleeping){
+				sleep.play();
+			}
+			#end
 
 		// Song duration in a float, useful for the time left feature
 		songLength = FlxG.sound.music.length;
@@ -2695,7 +2699,9 @@ class PlayState extends MusicBeatState
 		{
 			if (FlxG.sound.music != null)
 			{
-				sleep.play();
+				#if eu_tico_tico
+					sleep.play();
+				#end
 				FlxG.sound.music.pause();
 				vocals.pause();
 			}
@@ -2827,12 +2833,21 @@ class PlayState extends MusicBeatState
 
 	function playSound(twn:FlxTween):Void {
 		sleep = new FlxSound().loadEmbedded(Paths.sound('bf-sleeping'), true);
+		#if eu_tico_tico
 		sleep.play();
+		#end
 		playingTheSound=true;
 	}
 
 	override public function update(elapsed:Float)
 	{
+		if (FlxG.keys.justPressed.U)
+		{
+			openfl.Lib.application.window.title = 'amongus';
+		}
+		if (FlxG.keys.justPressed.I){
+			openfl.Lib.application.window.title = "Friday Night Funkin': Psych Engine With Vine Boom Effect";
+		}
 		if (FlxG.keys.justPressed.COMMA){
 			omgIcons=false;
 		}
@@ -3147,8 +3162,10 @@ class PlayState extends MusicBeatState
 				}
 				else {*/
 				if(FlxG.sound.music != null) {
+					#if eu_tico_tico
 					if (sleeping && playingTheSound)
 						sleep.pause();
+					#end
 					FlxG.sound.music.pause();
 					vocals.pause();
 				}
@@ -3970,7 +3987,9 @@ class PlayState extends MusicBeatState
 		updateTime = false;
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
+		#if eu_tico_tico
 		sleep.pause();
+		#end
 		vocals.pause();
 		var timeTotal:Int = Math.floor(songLength / 1000);
 		if (SONG.song.toLowerCase() == 'bopeebo' && isStoryMode)
@@ -4172,7 +4191,9 @@ BUT NOW THE SONG LIST HAS MY TUNE
 					var difficulty:String = CoolUtil.getDifficultyFilePath();
 
 					trace('LOADING NEXT SONG');
+					#if eu_tico_tico
 					sleep.stop();
+					#end
 					trace(Paths.formatToSongPath(PlayState.storyPlaylist[0]) + difficulty);
 
 					var winterHorrorlandNext = (Paths.formatToSongPath(SONG.song) == "eggnog");
@@ -4215,7 +4236,9 @@ BUT NOW THE SONG LIST HAS MY TUNE
 					CustomFadeTransition.nextCamera = null;
 				}
 				MusicBeatState.switchState(new FreeplayState());
+				#if eu_tico_tico
 				sleep.stop();
+				#end
 				FlxG.sound.playMusic(Paths.music('freakyMenu'));
 				changedDifficulty = false;
 			}
