@@ -1058,7 +1058,7 @@ class PlayState extends MusicBeatState
 		timeBar = new FlxBar(timeBarBG.x + 4, timeBarBG.y + 4, LEFT_TO_RIGHT, Std.int(timeBarBG.width - 8), Std.int(timeBarBG.height - 8), this,
 			'songPercent', 0, 1);
 		timeBar.scrollFactor.set();
-		timeBar.createFilledBar(0xFF000000, 0xFFFFFFFF);
+		timeBar.createFilledBar(0xFF000000, FlxColor.fromRGB(boyfriend.healthColorArray[0], boyfriend.healthColorArray[1], boyfriend.healthColorArray[2]));
 		timeBar.numDivisions = 800; //How much lag this causes?? Should i tone it down to idk, 400 or 200?
 		timeBar.alpha = 0;
 		if (SONG.song.toLowerCase() != 'fresh' && isStoryMode)
@@ -1456,7 +1456,8 @@ class PlayState extends MusicBeatState
 		
 		super.create();
 
-		if(curSong.toLowerCase() == "daydreaming"){
+		if(curSong.toLowerCase() == "daydreaming" && FlxG.random.bool(10)){
+			//openfl.Lib.application.window.title = 'ashdhihsdhb12901290139010212-11212';
 			addShaderToCamera('camGame', new VCRDistortionEffect(0.1, true, true, true));
 			addShaderToCamera('camHUD', new VCRDistortionEffect(0.1, true, true, true));
 		}
@@ -1465,7 +1466,7 @@ class PlayState extends MusicBeatState
 
 		for (key => type in precacheList)
 		{
-			//trace('Key $key is type $type');
+			trace('Key $key is type $type');
 			switch(type)
 			{
 				case 'image':
@@ -4265,6 +4266,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 						CustomFadeTransition.nextCamera = null;
 					}
 					MusicBeatState.switchState(new StoryMenuState());
+					//openfl.Lib.application.window.title = "Friday Night Funkin': Psych Engine With Vine Boom Effect";
 
 					// if ()
 					if(!ClientPrefs.getGameplaySetting('practice', false) && !ClientPrefs.getGameplaySetting('botplay', false)) {
@@ -4330,6 +4332,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 					CustomFadeTransition.nextCamera = null;
 				}
 				MusicBeatState.switchState(new FreeplayState());
+				//openfl.Lib.application.window.title = "Friday Night Funkin': Psych Engine With Vine Boom Effect";
 				#if eu_tico_tico
 				sleep.stop();
 				#end
