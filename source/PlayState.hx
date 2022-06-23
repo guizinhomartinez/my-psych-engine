@@ -218,6 +218,8 @@ class PlayState extends MusicBeatState
 	public var camHUDShaders:Array<ShaderEffect> = [];
 	public var camOtherShaders:Array<ShaderEffect> = [];
 
+	var showTime:Bool = (ClientPrefs.timeBarType != 'Disabled');
+
 	var danceLeft:Bool = false;
 
 	var dialogue:Array<String> = ['blah blah blah', 'coolswag'];
@@ -1150,7 +1152,6 @@ class PlayState extends MusicBeatState
 
 		laneunderlay.cameras = [camHUD];
 
-		var showTime:Bool = (ClientPrefs.timeBarType != 'Disabled');
 		timeTxt = new FlxText(STRUM_X + (FlxG.width / 2) - 248, 19, 400, "", 40);
 		timeTxt.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		timeTxt.scrollFactor.set();
@@ -1381,7 +1382,7 @@ class PlayState extends MusicBeatState
 		amongus.scrollFactor.set();
 		amongus.borderSize = 1.25;
 		amongus.alpha = 0;
-		if (FlxG.random.bool(0.01)){ // 1 / 1000 chance of showing
+		if (FlxG.random.bool(10)){ // 1 / 1000 chance of showing
 			add(amongus);
 			itAppeard = true;
 		}
@@ -1465,7 +1466,7 @@ class PlayState extends MusicBeatState
 			}
 		}
 		#end
-		
+
 		var daSong:String = Paths.formatToSongPath(curSong);
 		if (isStoryMode && !seenCutscene)
 		{
@@ -1555,6 +1556,8 @@ class PlayState extends MusicBeatState
 			precacheList.set(Paths.formatToSongPath(ClientPrefs.pauseMusic), 'music');
 		}
 
+		precacheList.set('alphabet', 'image');
+
 		#if desktop
 		// Updating Discord Rich Presence.
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
@@ -1578,6 +1581,9 @@ class PlayState extends MusicBeatState
 		}
 
 		Paths.clearUnusedMemory();
+
+		cacheCountdown();
+		cachePopUpScore();
 
 		for (key => type in precacheList)
 		{
@@ -2267,6 +2273,24 @@ class PlayState extends MusicBeatState
 	public var countdownSet:FlxSprite;
 	public var countdownGo:FlxSprite;
 	public static var startOnTime:Float = 0;
+
+	function cacheCountdown()
+	{
+		var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
+		introAssets.set('default', ['ready', 'set', 'go']);
+		introAssets.set('pixel', ['pixelUI/ready-pixel', 'pixelUI/set-pixel', 'pixelUI/date-pixel']);
+
+		var introAlts:Array<String> = introAssets.get('default');
+		if (isPixelStage) introAlts = introAssets.get('pixel');
+
+		for (asset in introAlts)
+			Paths.image(asset);
+
+		Paths.sound('intro3' + introSoundsSuffix);
+		Paths.sound('intro2' + introSoundsSuffix);
+		Paths.sound('intro1' + introSoundsSuffix);
+		Paths.sound('introGo' + introSoundsSuffix);
+	}
 
 	public function startCountdown():Void
 	{
@@ -3060,7 +3084,13 @@ class PlayState extends MusicBeatState
 		}
 
 		if (FlxG.keys.justPressed.Y) bounce=true;
-		else if (FlxG.keys.justPressed.H) bounce=false; iconP1.angle=0; iconP2.angle=0;
+		else if (FlxG.keys.justPressed.H){
+			bounce = false;
+			if (bounce = false){
+				iconP1.angle = 0;
+				iconP2.angle = 0;
+			}
+		}
 
 		if (FlxG.keys.justPressed.Z) {
 			new FlxTimer().start(0.1, function(tmr:FlxTimer)
@@ -3749,7 +3779,10 @@ class PlayState extends MusicBeatState
 	}
 
 	function changeAmongusY(tween:FlxTween):Void {
-		FlxTween.tween(amongus, {y: -5000}, 3);
+		new FlxTimer().start(4, function(tmr:FlxTimer)
+		{
+			FlxTween.tween(amongus, {y: -5000}, 3);
+		});
 	}
 
 	public function checkEventNote() {
@@ -4495,12 +4528,32 @@ BUT NOW THE SONG LIST HAS MY TUNE
 	public var showCombo:Bool = true;
 	public var showRating:Bool = true;
 
-	function healthTween(amt:Float){
+	/*function healthTween(amt:Float){
 		healthTweenObj.cancel();
 		healthTweenObj = FlxTween.num(health, health + amt, 0.1, {ease: FlxEase.cubeInOut}, function(v:Float)
 		{
 			health = v;
 		});
+	}*/
+
+	private function cachePopUpScore()
+	{
+		var pixelShitPart1:String = '';
+		var pixelShitPart2:String = '';
+		if (isPixelStage)
+		{
+			pixelShitPart1 = 'pixelUI/';
+			pixelShitPart2 = '-pixel';
+		}
+
+		Paths.image(pixelShitPart1 + "sick" + pixelShitPart2);
+		Paths.image(pixelShitPart1 + "good" + pixelShitPart2);
+		Paths.image(pixelShitPart1 + "bad" + pixelShitPart2);
+		Paths.image(pixelShitPart1 + "shit" + pixelShitPart2);
+
+		for (i in 0...10) {
+			Paths.image(pixelShitPart1 + 'num' + i + pixelShitPart2);
+		}
 	}
 
 	private function popUpScore(note:Note = null):Void
@@ -4534,9 +4587,19 @@ BUT NOW THE SONG LIST HAS MY TUNE
 				if(!note.ratingDisabled) shits++;
 				if (!cpuControlled)
 				{
-					noteMiss(note);
-					//popUpScore(note);
-					//healthTween(-0.0475);
+					combo = 0;
+					health -= note.missHealth;
+					if(instakillOnMiss)
+					{
+						vocals.volume = 0;
+						doDeathCheck(true);
+					}
+					songMisses++;
+					vocals.volume = 0;
+					if(!practiceMode) songScore -= 10;
+					
+					totalPlayed++;
+					RecalculateRating();
 				}
 			case "bad": // bad
 				totalNotesHit += 0.5;
@@ -4925,7 +4988,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 			//popUpScore(daNote);
 			notes.remove(daNote, true);
 			if(!practiceMode) songScore -= 5;
-			daNote.alpha = 0.2; 		// kade engine vibes?
+			daNote.alpha = 0; 		// kade engine vibes?
 			daNote.kill();
 			totalPlayed++;
 			goods++;
@@ -5166,9 +5229,9 @@ BUT NOW THE SONG LIST HAS MY TUNE
 						if (greenscale != null)
 							greenscale.cancel();
 						new FlxTimer().start(0.1, function(tmr:FlxTimer)
-							{
-								purplescale = FlxTween.tween(purple, {"scale.x": 1,"scale.y": 1}, 0.8, {ease: FlxEase.cubeOut});
-							});
+						{
+							purplescale = FlxTween.tween(purple, {"scale.x": 1,"scale.y": 1}, 0.8, {ease: FlxEase.cubeOut});
+						});
 						green.alpha = 0;
 						red.alpha = 0;
 						blue.alpha = 0;
@@ -5182,9 +5245,9 @@ BUT NOW THE SONG LIST HAS MY TUNE
 						if (greentween != null)
 							greentween.cancel();
 						new FlxTimer().start(0.1, function(tmr:FlxTimer)
-							{
-								purpletween = FlxTween.tween(purple, {alpha: 0}, 4, {ease: FlxEase.cubeOut});
-							});
+						{
+							purpletween = FlxTween.tween(purple, {alpha: 0}, 4, {ease: FlxEase.cubeOut});
+						});
 					case 1:
 						colorthing = 2;
 						blue.scale.set(0.81,0.81);
@@ -5197,9 +5260,9 @@ BUT NOW THE SONG LIST HAS MY TUNE
 						if (greenscale != null)
 							greenscale.cancel();
 						new FlxTimer().start(0.1, function(tmr:FlxTimer)
-							{
-								bluescale = FlxTween.tween(blue, {"scale.x": 1,"scale.y": 1}, 0.8, {ease: FlxEase.cubeOut});
-							});
+						{
+							bluescale = FlxTween.tween(blue, {"scale.x": 1,"scale.y": 1}, 0.8, {ease: FlxEase.cubeOut});
+						});
 						green.alpha = 0;
 						red.alpha = 0;
 						blue.alpha = 1;
@@ -5213,9 +5276,9 @@ BUT NOW THE SONG LIST HAS MY TUNE
 						if (greentween != null)
 							greentween.cancel();
 						new FlxTimer().start(0.1, function(tmr:FlxTimer)
-							{
-								bluetween = FlxTween.tween(blue, {alpha: 0}, 4, {ease: FlxEase.cubeOut});
-							});
+						{
+							bluetween = FlxTween.tween(blue, {alpha: 0}, 4, {ease: FlxEase.cubeOut});
+						});
 					case 2:
 						colorthing = 3;
 						green.scale.set(0.81,0.81);
@@ -5228,9 +5291,9 @@ BUT NOW THE SONG LIST HAS MY TUNE
 						if (greenscale != null)
 							greenscale.cancel();
 						new FlxTimer().start(0.1, function(tmr:FlxTimer)
-							{
-								greenscale = FlxTween.tween(green, {"scale.x": 1,"scale.y": 1}, 0.8, {ease: FlxEase.cubeOut});
-							});
+						{
+							greenscale = FlxTween.tween(green, {"scale.x": 1,"scale.y": 1}, 0.8, {ease: FlxEase.cubeOut});
+						});
 						green.alpha = 1;
 						red.alpha = 0;
 						blue.alpha = 0;
@@ -5623,8 +5686,6 @@ BUT NOW THE SONG LIST HAS MY TUNE
 		randomint++;
 		if (randomint == 2)
 			randomint = 0;
-
-		var showTime:Bool = (ClientPrefs.timeBarType != 'Disabled');
 
 		if (randomint == 0){
 			remove(timeBar);
