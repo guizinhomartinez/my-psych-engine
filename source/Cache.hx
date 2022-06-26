@@ -2,6 +2,7 @@
 package;
 import flixel.FlxG;
 import flixel.FlxSprite;
+import flixel.input.keyboard.FlxKey;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileDiamond;
 import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.transition.TransitionData;
@@ -30,6 +31,10 @@ using StringTools;
 
 class Cache extends MusicBeatState
 {
+	public static var muteKeys:Array<FlxKey> = [FlxKey.ZERO];
+	public static var volumeDownKeys:Array<FlxKey> = [FlxKey.NUMPADMINUS, FlxKey.MINUS];
+	public static var volumeUpKeys:Array<FlxKey> = [FlxKey.NUMPADPLUS, FlxKey.PLUS];
+
 	public static var bitmapData:Map<String,FlxGraphic>;
 	public static var bitmapData2:Map<String,FlxGraphic>;
 
@@ -40,6 +45,10 @@ class Cache extends MusicBeatState
 
 	override function create()
 	{
+		if(FlxG.sound.music == null) {
+			FlxG.sound.playMusic(Paths.music('offsetSong'), 0);
+		}
+
 		FlxG.mouse.visible = false;
 
 		FlxG.worldBounds.set(0,0);
@@ -75,11 +84,32 @@ class Cache extends MusicBeatState
 			cache();
 		});
 
+		FlxG.game.focusLostFramerate = 60;
+		FlxG.sound.muteKeys = muteKeys;
+		FlxG.sound.volumeDownKeys = volumeDownKeys;
+		FlxG.sound.volumeUpKeys = volumeUpKeys;
+		FlxG.keys.preventDefaultKeys = [TAB];
+
+		PlayerSettings.init();
+
+		// DEBUG BULLSHIT
+
+		super.create();
+
+		FlxG.save.bind('funkin', 'ninjamuffin99');
+		
+		ClientPrefs.loadPrefs();
+		
+		Highscore.load();
+
 		super.create();
 	}
 
 	override function update(elapsed) 
 	{
+		if (FlxG.sound.music != null)
+			Conductor.songPosition = FlxG.sound.music.time;
+
 		super.update(elapsed);
 	}
 

@@ -107,7 +107,11 @@ class MasterEditorMenu extends MusicBeatState
 
 		if (controls.BACK)
 		{
-			MusicBeatState.switchState(new MainMenuState());
+			if (FlxG.random.bool(100)) {
+				MusicBeatState.switchState(new MainMenuStateButCooler());
+			}else {
+				MusicBeatState.switchState(new MainMenuState());
+			}
 		}
 
 		if (controls.ACCEPT)

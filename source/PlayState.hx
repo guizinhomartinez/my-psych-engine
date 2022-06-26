@@ -69,7 +69,7 @@ using StringTools;
 
 class PlayState extends MusicBeatState
 {
-	public static var STRUM_X = 50;
+	public static var STRUM_X = 42;
 	public static var STRUM_X_MIDDLESCROLL = -278;
 	var cg:FlxSprite;
 
@@ -366,6 +366,35 @@ class PlayState extends MusicBeatState
 	override public function create()
 	{
 		Paths.clearStoredMemory();
+
+		if (ClientPrefs.kadeEngineTxt) {
+			ratingStuff = [
+				['F', 0.2], //From 0% to 19%
+				['E', 0.4], //From 20% to 39%
+				['D', 0.5], //From 40% to 49%
+				['C', 0.6], //From 50% to 59%
+				['B', 0.69], //From 60% to 68%
+				['A', 0.7], //69%
+				['AA', 0.8], //From 70% to 79%
+				['AAA', 0.9], //From 80% to 89%
+				['AAAA', 1], //From 90% to 99%
+				['AAAAA', 1] //The value on this one isn't used actually, since Perfect is always "1"
+			];
+		} else {
+			ratingStuff = [
+				['You Suck!', 0.2], //From 0% to 19%
+				['Shit', 0.4], //From 20% to 39%
+				['Bad', 0.5], //From 40% to 49%
+				['Bruh', 0.6], //From 50% to 59%
+				['Meh', 0.69], //From 60% to 68%
+				['Nice', 0.7], //69%
+				['Good', 0.8], //From 70% to 79%
+				['Great', 0.9], //From 80% to 89%
+				['Sick!', 1], //From 90% to 99%
+				['Perfect!!', 1] //The value on this one isn't used actually, since Perfect is always "1"
+			];
+		}
+
 
 		// for lua
 		instance = this;
@@ -3083,6 +3112,33 @@ class PlayState extends MusicBeatState
 			omgIcons=false;
 		}
 
+		if (FlxG.keys.justPressed.FIVE) {
+			FlxTween.tween(healthBarBG, {alpha: 0}, 0.25, {ease: FlxEase.quadOut});
+			FlxTween.tween(healthBar, {alpha: 0}, 0.25, {ease: FlxEase.quadOut});
+			FlxTween.tween(iconP1, {alpha: 0}, 0.25, {ease: FlxEase.quadOut});
+			FlxTween.tween(iconP2, {alpha: 0}, 0.25, {ease: FlxEase.quadOut});
+			FlxTween.tween(scoreTxt, {alpha: 0}, 0.25, {ease: FlxEase.quadOut});
+
+			return trace("WHO ASKED YOU??");
+		} if (FlxG.keys.justPressed.U) {
+			FlxTween.tween(healthBarBG, {alpha: 1}, 0.25, {ease: FlxEase.quadOut});
+			FlxTween.tween(healthBar, {alpha: 1}, 0.25, {ease: FlxEase.quadOut});
+			FlxTween.tween(iconP1, {alpha: 1}, 0.25, {ease: FlxEase.quadOut});
+			FlxTween.tween(iconP2, {alpha: 1}, 0.25, {ease: FlxEase.quadOut});
+			FlxTween.tween(scoreTxt, {alpha: 1}, 0.25, {ease: FlxEase.quadOut});
+
+			return trace('oh magah');
+		}
+		if (ClientPrefs.healthVisible) {
+			if (healthBar.percent <= 20) {
+				scoreTxt.color = 0xFFff3535;
+			} else if (healthBar.percent >= 90) {
+				scoreTxt.color = 0xFF6bff67;
+			} else {
+				scoreTxt.color = FlxColor.WHITE;
+			}
+		}
+
 		if (FlxG.keys.justPressed.Y) bounce=true;
 		else if (FlxG.keys.justPressed.H){
 			bounce = false;
@@ -3357,15 +3413,15 @@ class PlayState extends MusicBeatState
 		}
 
 		if (ClientPrefs.kadeEngineTxt && !ClientPrefs.boomEffect){ //if its kade engine score and its NOT boom effect then
-			if (ratingName == '?')
+			if (ratingName == 'N/A')
 				scoreTxt.text = 'Score: ' + songScore + ' | Combo Breaks: ' + songMisses + ' | Accuracy: 0 % | N/A';
 			else
-				scoreTxt.text = 'Score: ' + songScore + ' | Combo Breaks: ' + songMisses + ' | Accuracy: ' + convertedAccDisplay + ' %' + ' | (' + ratingFC + ')';
+				scoreTxt.text = 'Score: ' + songScore + ' | Combo Breaks: ' + songMisses + ' | Accuracy: ' + convertedAccDisplay + ' %' + ' | (' + ratingFC + ') ' + ratingName;
 		}else if (ClientPrefs.kadeEngineTxt && ClientPrefs.boomEffect){ //if its kade engine score and it IS boom effect then
-			if (ratingName == '?')
-				scoreTxt.text = 'Score: ' + songScore + ' | Vine Booms: ' + songMisses + ' | Accuracy: 0 % | N/A';
+			if (ratingName == 'N/A')
+				scoreTxt.text = 'Score: ' + songScore + ' | Vine Booms: ' + songMisses + ' | Accuracy: 0 % | M/A';
 			else
-				scoreTxt.text = 'Score: ' + songScore + ' | Vine Booms: ' + songMisses + ' | Accuracy: ' + convertedAccDisplay + ' %' + ' | (' + ratingFC + ')';
+				scoreTxt.text = 'Score: ' + songScore + ' | Vine Booms: ' + songMisses + ' | Accuracy: ' + convertedAccDisplay + ' %' + ' | (' + ratingFC + ') ' + ratingName;
 		}
 		//a
 		if (ClientPrefs.healthVisible) // if health thing is ON then
@@ -5889,10 +5945,15 @@ BUT NOW THE SONG LIST HAS MY TUNE
 		var ret:Dynamic = callOnLuas('onRecalculateRating', []);
 		if(ret != FunkinLua.Function_Stop)
 		{
-			if(totalPlayed < 1) //Prevent divide by 0
-				ratingName = '?';
-			else
-			{
+			if(totalPlayed < 1) { //Prevent divide by 0
+				if (!ClientPrefs.kadeEngineTxt)
+					ratingName = '?';
+				else {
+					ratingName = 'N/A';
+					scoreTxt.alpha = 0;
+				}
+			} else {
+				FlxTween.tween(scoreTxt, {alpha: 1}, 0.2, {ease: FlxEase.quadOut});
 				// Rating Percent
 				ratingPercent = Math.min(1, Math.max(0, totalNotesHit / totalPlayed));
 				//trace((totalNotesHit / totalPlayed) + ', Total: ' + totalPlayed + ', notes hit: ' + totalNotesHit);
@@ -6018,46 +6079,8 @@ BUT NOW THE SONG LIST HAS MY TUNE
 	var curLightEvent:Int = -1;
 }
 
-function imNoteGonnaUseThis():Void {
-	//trace("the healthBar y is: " + healthBar.y);
-		/*#if COOL_THING
-		if (FlxG.keys.justPressed.FIVE){
-			if(ClientPrefs.downScroll) {
-				FlxTween.tween(healthBarBG.offset,{"y":healthBar.y-900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(healthBar.offset,{"y":healthBar.y-900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(iconP1.offset,{"y":iconP1.y-900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(iconP2.offset,{"y":iconP2.y-900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(scoreTxt.offset,{"y":scoreTxt.y-900},0.9,{ease: FlxEase.elasticInOut});
-			} else {
-				FlxTween.tween(healthBarBG.offset,{"y":healthBar.y + 900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(healthBar.offset,{"y":healthBar.y + 900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(iconP1.offset,{"y":iconP1.y + 900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(iconP2.offset,{"y":iconP2.y + 900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(scoreTxt.offset,{"y":scoreTxt.y + 900},0.9,{ease: FlxEase.elasticInOut});
-			}
-		}if (FlxG.keys.justPressed.U){
-			if(ClientPrefs.downScroll) {
-				FlxTween.tween(healthBarBG.offset,{"y":healthBar.y+900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(healthBar.offset,{"y":healthBar.y+900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(iconP1.offset,{"y":iconP1.y+900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(iconP2.offset,{"y":iconP2.y+900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(scoreTxt.offset,{"y":scoreTxt.y+900},0.9,{ease: FlxEase.elasticInOut});
-			} else {
-				FlxTween.tween(healthBarBG.offset,{"y":healthBarBG.y - 900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(healthBar.offset,{"y":healthBar.y - 900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(iconP1.offset,{"y":iconP1.y - 900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(iconP2.offset,{"y":iconP2.y - 900},0.9,{ease: FlxEase.elasticInOut});
-				FlxTween.tween(scoreTxt.offset,{"y":scoreTxt.y - 900},0.9,{ease: FlxEase.elasticInOut});
-			}
-		}
-		#end*/
-		/*if (healthBar.percent < 19){
-			scoreTxt.color = 0xFFff3535;
-		}else if (healthBar.percent > 90){
-			scoreTxt.color = 0xFF6bff67;
-		}else{
-			scoreTxt.color = FlxColor.WHITE;
-		}*/
+	function imNotGonnaUseThis() {
+		//trace("the healthBar y is: " + healthBar.y);
 
 		/*if (ClientPrefs.boomEffect){
 			if(ratingName == '?') {
@@ -6120,4 +6143,5 @@ function imNoteGonnaUseThis():Void {
 				defaultCamZoom = defaultCamZoom / 2 * 2;
 			});
 		}*/
-}
+
+	}
