@@ -84,6 +84,9 @@ class VisualsUISubState extends BaseOptionsMenu
 			true);
 		addOption(option);
 
+		var option:Option = new Option('Beatiful effect from casette girl', "if checked, it will show the beatiful effect from\nvs casette girl when getting a good note hit", "beatifulHud", "bool", true);
+		addOption(option);
+
 		var option:Option = new Option('Kade Engine Score',
 			"If unchecked, will not show kade engine's score.",
 			'kadeEngineTxt',

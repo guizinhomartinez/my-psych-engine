@@ -1,5 +1,6 @@
 package;
 
+import FreeplayState.SongMetadata;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -234,7 +235,7 @@ class MainMenuStateButCooler extends MusicBeatState
 	override function update(elapsed:Float)
 	{
 		if (FlxG.mouse.overlaps(hahadumb) && FlxG.mouse.justPressed)
-			MusicBeatState.switchState(new FreeplayState());
+			MusicBeatState.switchState(new Stinky());
 
 		if (FlxG.sound.music.volume < 0.8)
 		{
@@ -246,8 +247,7 @@ class MainMenuStateButCooler extends MusicBeatState
 
 		if (!selectedSomethin)
 		{
-			if (FlxG.mouse.justPressedRight) { FlxG.sound.play(Paths.sound('scrollMenu')); changeItem(1); }
-			else if (FlxG.mouse.justPressedMiddle) { FlxG.sound.play(Paths.sound('scrollMenu')); changeItem(-1); } // ha the code is smaller and now normal people cant read it because of how compact it is >:)
+			if (FlxG.mouse.wheel != 0) { FlxG.sound.play(Paths.sound('scrollMenu')); changeItem(-FlxG.mouse.wheel); } // ha the code is smaller and now normal people cant read it because of how compact it is >:)
 
 			if (controls.UI_UP_P)
 			{

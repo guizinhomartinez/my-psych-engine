@@ -1,2 +1,0 @@
-Value 1: Alpha
-Value 2: Speed

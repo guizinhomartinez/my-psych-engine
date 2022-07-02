@@ -13,10 +13,6 @@ class NoteSplash extends FlxSprite
 	public function new(x:Float = 0, y:Float = 0, ?note:Int = 0) {
 		super(x, y);
 
-		/*CoolUtil.precacheImage('noteSplash2');
-		CoolUtil.precacheImage('AllnoteSplashes');
-		CoolUtil.precacheImage('noteSplashes');*/
-
 		Paths.returnGraphic('noteSplash2');
 		Paths.returnGraphic('AllnoteSplashes');
 		Paths.returnGraphic('noteSplashes');
@@ -35,12 +31,13 @@ class NoteSplash extends FlxSprite
 
 	public function setupNoteSplash(x:Float, y:Float, note:Int = 0, texture:String = null, hueColor:Float = 0, satColor:Float = 0, brtColor:Float = 0) {
 		setPosition(x - Note.swagWidth * 0.95, y - Note.swagWidth);
-		if (texture == 'noteSplash2'){
+		if (texture == 'noteSplash2' || texture == 'noteSplash-b&b'){
 			alpha = 0.6;
 			scale.set(1, 1);
 			offset.set(0, 0);
 		}
-		else alpha = 0.6;
+		else
+			alpha = 0.6;
 
 		if(texture == null) {
 			if (ClientPrefs.noteSplashSelector == 'noteSplash2'){
@@ -61,7 +58,7 @@ class NoteSplash extends FlxSprite
 		colorSwap.hue = hueColor;
 		colorSwap.saturation = satColor;
 		colorSwap.brightness = brtColor;
-		if (texture != 'AllnoteSplashes' && texture != 'noteSplash2')
+		if (texture != 'AllnoteSplashes' && texture != 'noteSplash2' && texture != 'noteSplash-b&b')
 			offset.set(10, 10);
 		else if(texture != 'noteSplash2' && texture == 'AllnoteSplashes')
 			offset.set(-20, -20);
@@ -81,7 +78,7 @@ class NoteSplash extends FlxSprite
 				animation.addByPrefix("note3-" + i, "RedC instance 1", 24, false);
 			}
 		}
-		else if (skin == 'noteSplash2'){
+		else if (skin == 'noteSplash2' || skin == 'noteSplash-b&b'){
 			for (i in 1...3) {
 				animation.addByPrefix("note1-" + i, "note impact " + i + " blue", 24, false);
 				animation.addByPrefix("note2-" + i, "note impact " + i + " green", 24, false);
