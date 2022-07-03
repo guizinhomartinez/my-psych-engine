@@ -1126,14 +1126,12 @@ class PlayState extends MusicBeatState
 		switch(curStage) {
 			case 'day':
 				dad.x -= 150;
-				dad.y += 210;
-				boyfriend.x += 191;
-				boyfriend.y -= 310;
-				gf.x -= 70;
-				gf.y -= 50;
-				dad.y -= 210;
-				boyfriend.x -= 60;
-				boyfriend.y += 400;
+				//dad.y += 210;
+				boyfriend.x += 131;
+				boyfriend.y += 90;
+				//dad.y -= 210;
+				//boyfriend.x -= 60;
+				//boyfriend.y += 400;
 		}
 
 		precacheList.set('weekcg/RIGHT LIGHT', 'image'); //precache particle image
@@ -2381,7 +2379,7 @@ class PlayState extends MusicBeatState
 	var finishTimer:FlxTimer = null;
 
 	// For being able to mess with the sprites on Lua
-	public var countdown3:FlxSprite;
+	public var countdownEmoji:FlxSprite;
 	public var countdownReady:FlxSprite;
 	public var countdownSet:FlxSprite;
 	public var countdownGo:FlxSprite;
@@ -2392,9 +2390,12 @@ class PlayState extends MusicBeatState
 		var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 		introAssets.set('default', ['ready', 'set', 'go']);
 		introAssets.set('pixel', ['pixelUI/ready-pixel', 'pixelUI/set-pixel', 'pixelUI/date-pixel']);
+		introAssets.set('day', ['b&b/3', 'b&b/2', 'b&b/1', 'b&b/go']);
 
 		var introAlts:Array<String> = introAssets.get('default');
 		if (isPixelStage) introAlts = introAssets.get('pixel');
+
+		if (curStage == 'day') introAlts = introAssets.get('day');
 
 		for (asset in introAlts)
 			Paths.image(asset);
@@ -2526,6 +2527,7 @@ class PlayState extends MusicBeatState
 				var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 				introAssets.set('default', ['ready', 'set', 'go']);
 				introAssets.set('pixel', ['pixelUI/ready-pixel', 'pixelUI/set-pixel', 'pixelUI/date-pixel']);
+				introAssets.set('day', ['b&b/3', 'b&b/2', 'b&b/1', 'b&b/go']);
 
 				var introAlts:Array<String> = introAssets.get('default');
 				var antialias:Bool = ClientPrefs.globalAntialiasing;
@@ -2533,6 +2535,8 @@ class PlayState extends MusicBeatState
 					introAlts = introAssets.get('pixel');
 					antialias = false;
 				}
+
+				if (curStage == 'day') introAlts = introAssets.get('day');
 
 				// head bopping for bg characters on Mall
 				if(curStage == 'mall') {
@@ -2546,10 +2550,37 @@ class PlayState extends MusicBeatState
 				switch (swagCounter)
 				{
 					case 0:
-						FlxG.sound.play(Paths.sound('intro3' + introSoundsSuffix), 0.6);
+						countdownEmoji = new FlxSprite();
+						countdownEmoji.loadGraphic(Paths.image(introAlts[0]));
+						countdownEmoji.scrollFactor.set();
+						countdownEmoji.updateHitbox();
+
+						if (PlayState.isPixelStage)
+							countdownEmoji.setGraphicSize(Std.int(countdownEmoji.width * daPixelZoom));
+
+						countdownEmoji.screenCenter();
+						countdownEmoji.antialiasing = antialias;
+						add(countdownEmoji);
+						FlxTween.tween(countdownEmoji, {/*y: countdownEmoji.y + 100,*/ alpha: 0}, Conductor.crochet / 1000, {
+							ease: FlxEase.cubeInOut,
+							onComplete: function(twn:FlxTween)
+							{
+								remove(countdownEmoji);
+								countdownEmoji.destroy();
+							}
+						});
+						if (curStage != 'day') {
+							FlxG.sound.play(Paths.sound('intro3' + introSoundsSuffix), 0.6);
+							remove(countdownEmoji);
+						} else {
+							FlxG.sound.play(Paths.sound('bob/3' + introSoundsSuffix), 0.6);
+						}
 					case 1:
 						countdownReady = new FlxSprite();
-						countdownReady.loadGraphic(Paths.image(introAlts[0]));
+						if (curStage == 'day')
+							countdownReady.loadGraphic(Paths.image(introAlts[1]));
+						else
+							countdownReady.loadGraphic(Paths.image(introAlts[0]));
 						countdownReady.scrollFactor.set();
 						countdownReady.updateHitbox();
 
@@ -2567,10 +2598,16 @@ class PlayState extends MusicBeatState
 								countdownReady.destroy();
 							}
 						});
-						FlxG.sound.play(Paths.sound('intro2' + introSoundsSuffix), 0.6);
+						if (curStage != 'day')
+							FlxG.sound.play(Paths.sound('intro2' + introSoundsSuffix), 0.6);
+						else
+							FlxG.sound.play(Paths.sound('bob/2' + introSoundsSuffix), 0.6);
 					case 2:
 						countdownSet = new FlxSprite();
-						countdownSet.loadGraphic(Paths.image(introAlts[1]));
+						if (curStage == 'day')
+							countdownSet.loadGraphic(Paths.image(introAlts[2]));
+						else
+							countdownSet.loadGraphic(Paths.image(introAlts[1]));
 						countdownSet.scrollFactor.set();
 
 						if (PlayState.isPixelStage)
@@ -2587,10 +2624,16 @@ class PlayState extends MusicBeatState
 								countdownSet.destroy();
 							}
 						});
-						FlxG.sound.play(Paths.sound('intro1' + introSoundsSuffix), 0.6);
+						if (curStage != 'day')
+							FlxG.sound.play(Paths.sound('intro1' + introSoundsSuffix), 0.6);
+						else
+							FlxG.sound.play(Paths.sound('bob/1' + introSoundsSuffix), 0.6);
 					case 3:
 						countdownGo = new FlxSprite();
-						countdownGo.loadGraphic(Paths.image(introAlts[2]));
+						if (curStage == 'day')
+							countdownGo.loadGraphic(Paths.image(introAlts[3]));
+						else
+							countdownGo.loadGraphic(Paths.image(introAlts[2]));
 						countdownGo.scrollFactor.set();
 
 						if (PlayState.isPixelStage)
@@ -2609,7 +2652,10 @@ class PlayState extends MusicBeatState
 								countdownGo.destroy();
 							}
 						});
-						FlxG.sound.play(Paths.sound('introGo' + introSoundsSuffix), 0.6);
+						if (curStage != 'day')
+							FlxG.sound.play(Paths.sound('introGo' + introSoundsSuffix), 0.6);
+						else
+							FlxG.sound.play(Paths.sound('bob/Go' + introSoundsSuffix), 0.6);
 					case 4:
 				}
 
@@ -4735,6 +4781,10 @@ BUT NOW THE SONG LIST HAS MY TUNE
 			pixelShitPart2 = '-pixel';
 		}
 
+		if (SONG.song.toLowerCase() == 'tutorial ex' && curStep >= 380) {
+			pixelShitPart1 = 'ex/';
+		}
+
 		Paths.image(pixelShitPart1 + "sick" + pixelShitPart2);
 		Paths.image(pixelShitPart1 + "good" + pixelShitPart2);
 		Paths.image(pixelShitPart1 + "bad" + pixelShitPart2);
@@ -4858,7 +4908,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 			pixelShitPart2 = '-pixel';
 		}
 
-		if (SONG.song.toLowerCase() == 'tutorial ex' && curStep == 380) {
+		if (SONG.song.toLowerCase() == 'tutorial ex' && curStep >= 380) {
 			pixelShitPart1 = 'ex/';
 		}
 
@@ -5592,6 +5642,10 @@ BUT NOW THE SONG LIST HAS MY TUNE
 			brt = note.noteSplashBrt;
 		}
 
+		if (curStage == 'day' && curStep >= 380) {
+			skin = 'noteSplash-b&b';
+		}
+
 		var splash:NoteSplash = grpNoteSplashes.recycle(NoteSplash);
 		splash.setupNoteSplash(x, y, data, skin, hue, sat, brt);
 		grpNoteSplashes.add(splash);
@@ -5806,11 +5860,11 @@ BUT NOW THE SONG LIST HAS MY TUNE
 		isHidden = true;
 		if (!ClientPrefs.hideHud && isHidden)
 		{
-			FlxTween.tween(scoreTxt, {alpha: 0}, (Conductor.stepCrochet * 16 / 1000), {ease: FlxEase.quadInOut});
-			FlxTween.tween(iconP1, {alpha: 0}, (Conductor.stepCrochet * 16 / 1000), {ease: FlxEase.quadInOut});
-			FlxTween.tween(iconP2, {alpha: 0}, (Conductor.stepCrochet * 16 / 1000), {ease: FlxEase.quadInOut});
-			FlxTween.tween(healthBar, {alpha: 0}, (Conductor.stepCrochet * 16 / 1000), {ease: FlxEase.quadInOut});
-			FlxTween.tween(healthBarBG, {alpha: 0}, (Conductor.stepCrochet * 16 / 1000), {ease: FlxEase.quadInOut});
+			FlxTween.tween(scoreTxt, {alpha: 0}, (Conductor.stepCrochet * 16 / 10003), {ease: FlxEase.quadInOut});
+			FlxTween.tween(iconP1, {alpha: 0}, (Conductor.stepCrochet * 16 / 10003), {ease: FlxEase.quadInOut});
+			FlxTween.tween(iconP2, {alpha: 0}, (Conductor.stepCrochet * 16 / 10003), {ease: FlxEase.quadInOut});
+			FlxTween.tween(healthBar, {alpha: 0}, (Conductor.stepCrochet * 16 / 10003), {ease: FlxEase.quadInOut});
+			FlxTween.tween(healthBarBG, {alpha: 0}, (Conductor.stepCrochet * 16 / 10003), {ease: FlxEase.quadInOut});
 		}
 	}
 
@@ -5855,7 +5909,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 					defaultCamZoom = 1.2;
 				});
 				//tweenA();
-				FlxTween.tween(camHUD, {alpha: 0}, 0.4, {ease: FlxEase.quadInOut});
+				FlxTween.tween(camHUD, {alpha: 0}, 0.55, {ease: FlxEase.quadInOut});
 			}
 			if (curStep == 380) {
 				tutorialex = true;
@@ -5876,6 +5930,11 @@ BUT NOW THE SONG LIST HAS MY TUNE
 				});
 
 				return trace('look the stuff work :0');
+			}
+			if (curStep == 381) {
+				dad.x -= 150;
+				boyfriend.x += 131;
+				boyfriend.y += 90;
 			}
 			if (curStep == 767) {
 				FlxTween.tween(camHUD, {alpha: 0}, 0.4, {ease: FlxEase.quadInOut});

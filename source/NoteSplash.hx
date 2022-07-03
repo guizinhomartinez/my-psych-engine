@@ -16,6 +16,7 @@ class NoteSplash extends FlxSprite
 		Paths.returnGraphic('noteSplash2');
 		Paths.returnGraphic('AllnoteSplashes');
 		Paths.returnGraphic('noteSplashes');
+		Paths.returnGraphic('noteSplash-b&b');
 
 		var skin:String = 'noteSplash2';
 		if(PlayState.SONG.splashSkin != null && PlayState.SONG.splashSkin.length > 0) skin = PlayState.SONG.splashSkin;
@@ -78,7 +79,7 @@ class NoteSplash extends FlxSprite
 				animation.addByPrefix("note3-" + i, "RedC instance 1", 24, false);
 			}
 		}
-		else if (skin == 'noteSplash2' || skin == 'noteSplash-b&b'){
+		else if (skin == 'noteSplash2'){
 			for (i in 1...3) {
 				animation.addByPrefix("note1-" + i, "note impact " + i + " blue", 24, false);
 				animation.addByPrefix("note2-" + i, "note impact " + i + " green", 24, false);
@@ -86,12 +87,20 @@ class NoteSplash extends FlxSprite
 				animation.addByPrefix("note3-" + i, "note impact " + i + " red" , 24, false);
 			}
 		}
+		else if (skin == 'noteSplash-b&b'){
+			for (i in 1...3) {
+				animation.addByPrefix("note1-" + i, "note impact " + i + " red", 24, false);
+				animation.addByPrefix("note2-" + i, "note impact " + i + " blue", 24, false);
+				animation.addByPrefix("note0-" + i, "note impact " + i + " green", 24, false);
+				animation.addByPrefix("note3-" + i, "note impact " + i + " purple" , 24, false);
+			}
+		}
 		else {
 			for (i in 1...3) {
 				animation.addByPrefix("note1-" + i, "note splash blue " + i, 24, false);
-				animation.addByPrefix("note2-" + i, "note splash green " + i, 24, false);
+				animation.addByPrefix("note2-" + i, "note splash red " + i, 24, false);
 				animation.addByPrefix("note0-" + i, "note splash purple " + i, 24, false);
-				animation.addByPrefix("note3-" + i, "note splash red " + i, 24, false);
+				animation.addByPrefix("note3-" + i, "note splash green " + i, 24, false);
 			}
 		}
 	}
