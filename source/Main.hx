@@ -85,6 +85,8 @@ class Main extends Sprite
 		initialState = TitleState;
 		#end
 
+		// a
+
 		#if uselessPrecache
 		initialState = Cache;
 		#end
