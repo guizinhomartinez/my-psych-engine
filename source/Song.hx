@@ -57,7 +57,7 @@ class Song
 			songJson.player3 = null;
 		}
 
-		if(songJson.events == null)
+		if (songJson.events == null)
 		{
 			songJson.events = [];
 			for (secNum in 0...songJson.notes.length)
@@ -67,16 +67,17 @@ class Song
 				var i:Int = 0;
 				var notes:Array<Dynamic> = sec.sectionNotes;
 				var len:Int = notes.length;
-				while(i < len)
+				while (i < len)
 				{
 					var note:Array<Dynamic> = notes[i];
-					if(note[1] < 0)
+					if (note[1] < 0)
 					{
 						songJson.events.push([note[0], [[note[2], note[3], note[4]]]]);
 						notes.remove(note);
 						len = notes.length;
 					}
-					else i++;
+					else
+						i++;
 				}
 			}
 		}

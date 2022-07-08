@@ -291,6 +291,7 @@ class TitleState extends MusicBeatState
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
 		
 		add(bg);
+		bg.shader = swagShader.shader;
 		add(gfDance);
 		gfDance.shader = swagShader.shader;
 		add(logoBl);
@@ -325,9 +326,6 @@ class TitleState extends MusicBeatState
 		logo.screenCenter();
 		logo.antialiasing = ClientPrefs.globalAntialiasing;
 		// add(logo);
-
-		// FlxTween.tween(logoBl, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG});
-		// FlxTween.tween(logo, {y: logoBl.y + 50}, 0.6, {ease: FlxEase.quadInOut, type: PINGPONG, startDelay: 0.1});
 
 		var black:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
 		black.alpha = 0.5;
@@ -651,7 +649,7 @@ class TitleState extends MusicBeatState
 	{
 		if (!skippedIntro)
 		{
-			FlxTween.tween(logoBl, {y: -100}, 1.4, {ease: FlxEase.expoInOut});
+		//	FlxTween.tween(logoBl, {y: -50}, 1.4, {ease: FlxEase.expoInOut});
 
 			logoBl.angle = -4;
 

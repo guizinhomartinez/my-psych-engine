@@ -30,7 +30,7 @@ class NoteSplash extends FlxSprite
 		antialiasing = ClientPrefs.globalAntialiasing;
 	}
 
-	public function setupNoteSplash(x:Float, y:Float, note:Int = 0, texture:String = null, hueColor:Float = 0, satColor:Float = 0, brtColor:Float = 0) {
+	public function setupNoteSplash(x:Float, y:Float, note:Int = 0, texture:String = null, hueColor:Float = 0, satColor:Float = 0, brtColor:Float = 0, noteStyle:String = '') {
 		setPosition(x - Note.swagWidth * 0.95, y - Note.swagWidth);
 		if (texture == 'noteSplash2' || texture == 'noteSplash-b&b'){
 			alpha = 0.6;
@@ -94,13 +94,19 @@ class NoteSplash extends FlxSprite
 				animation.addByPrefix("note0-" + i, "note impact " + i + " green", 24, false);
 				animation.addByPrefix("note3-" + i, "note impact " + i + " purple" , 24, false);
 			}
-		}
-		else {
+		} else if (skin == 'NOTE_splashesSTAR') {
 			for (i in 1...3) {
 				animation.addByPrefix("note1-" + i, "note splash blue " + i, 24, false);
-				animation.addByPrefix("note2-" + i, "note splash red " + i, 24, false);
+				animation.addByPrefix("note2-" + i, "note splash green " + i, 24, false);
 				animation.addByPrefix("note0-" + i, "note splash purple " + i, 24, false);
-				animation.addByPrefix("note3-" + i, "note splash green " + i, 24, false);
+				animation.addByPrefix("note3-" + i, "note splash red " + i, 24, false);
+			}
+		} else {
+			for (i in 1...3) {
+				animation.addByPrefix("note1-" + i, "note splash blue " + i, 24, false);
+				animation.addByPrefix("note2-" + i, "note splash green " + i, 24, false);
+				animation.addByPrefix("note0-" + i, "note splash purple " + i, 24, false);
+				animation.addByPrefix("note3-" + i, "note splash red " + i, 24, false);
 			}
 		}
 	}

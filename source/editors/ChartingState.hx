@@ -75,23 +75,109 @@ class ChartingState extends MusicBeatState
 	var redos = [];
 	var eventStuff:Array<Dynamic> =
 	[
-		['', "Nothing. Yep, that's right."],
-		['Hey!', "Plays the \"Hey!\" animation from Bopeebo,\nValue 1: BF = Only Boyfriend, GF = Only Girlfriend,\nSomething else = Both.\nValue 2: Custom animation duration,\nleave it blank for 0.6s"],
-		['Blammed Lights', "Value 1: 0 = Turn off, 1 = Blue, 2 = Green,\n3 = Pink, 4 = Red, 5 = Orange, Anything else = Random.\n\nNote to modders: This effect is starting to get \nREEEEALLY overused, this isn't very creative bro smh."],
-		['Set GF Speed', "Sets GF head bopping speed,\nValue 1: 1 = Normal speed,\n2 = 1/2 speed, 4 = 1/4 speed etc.\nUsed on Fresh during the beatbox parts.\n\nWarning: Value must be integer!"],
-		['Philly Glow', "Exclusive to Week 3\nValue 1: 0/1/2 = OFF/ON/Reset Gradient\n \nNo, i won't add it to other weeks."],
-		['Kill Henchmen', "For Mom's songs, don't use this please, i love them :("],
-		['Add Camera Zoom', "Used on MILF on that one \"hard\" part\nValue 1: Camera zoom add (Default: 0.015)\nValue 2: UI zoom add (Default: 0.03)\nLeave the values blank if you want to use Default."],
-		['BG Freaks Expression', "Should be used only in \"school\" Stage!"],
-		['Blammed Lights', "Value 1: 0 = Turn off, 1 = Blue, 2 = Green,\n3 = Pink, 4 = Red, 5 = Orange, Anything else = Random.\n\nNote to modders: This effect is starting to get \nREEEEALLY overused, this isn't very creative bro smh."],
-		['Trigger BG Ghouls', "Should be used only in \"schoolEvil\" Stage!"],
-		['Play Animation', "Plays an animation on a Character,\nonce the animation is completed,\nthe animation changes to Idle\n\nValue 1: Animation to play.\nValue 2: Character (Dad, BF, GF)"],
-		['Camera Follow Pos', "Value 1: X\nValue 2: Y\n\nThe camera won't change the follow point\nafter using this, for getting it back\nto normal, leave both values blank."],
-		['Alt Idle Animation', "Sets a specified suffix after the idle animation name.\nYou can use this to trigger 'idle-alt' if you set\nValue 2 to -alt\n\nValue 1: Character to set (Dad, BF or GF)\nValue 2: New suffix (Leave it blank to disable)"],
-		['Screen Shake', "Value 1: Camera shake\nValue 2: HUD shake\n\nEvery value works as the following example: \"1, 0.05\".\nThe first number (1) is the duration.\nThe second number (0.05) is the intensity."],
-		['Change Character', "Value 1: Character to change (Dad, BF, GF)\nValue 2: New character's name"],
-		['Change Scroll Speed', "Value 1: Scroll Speed Multiplier (1 is default)\nValue 2: Time it takes to change fully in seconds."],
-		['Set Property', "Value 1: Variable name\nValue 2: New value"]
+		[
+			'',
+			"Nothing. Yep, that's right."
+		],
+		[
+			'Hey!',
+			"Plays the \"Hey!\" animation from Bopeebo,\n
+			Value 1: BF = Only Boyfriend, GF = Only Girlfriend,\nSomething else = Both.\n
+			Value 2: Custom animation duration,\nleave it blank for 0.6s"
+		],
+		[
+			'Set GF Speed',
+			"Sets GF head bopping speed,\n
+			Value 1: 1 = Normal speed,\n2 = 1/2 speed, 4 = 1/4 speed etc.\nUsed on Fresh during the beatbox parts.\n\nWarning: Value must be integer!"
+		],
+		[
+			'Philly Glow',
+			"Exclusive to Week 3\nValue 1: 0/1/2 = OFF/ON/Reset Gradient\n \nNo, i won't add it to other weeks."
+		],
+		[
+			'Kill Henchmen',
+			"For Mom's songs, don't use this please, i love them :("
+		],
+		[
+			'Add Camera Zoom',
+			"Used on MILF on that one \"hard\" part\nValue 1: Camera zoom add (Default: 0.015)\n
+			Value 2: UI zoom add (Default: 0.03)\nLeave the values blank if you want to use Default."
+		],
+		[
+			'BG Freaks Expression', 
+			"Should be used only in \"school\" Stage!"
+		],
+		[
+			'Trigger BG Ghouls', 
+			"Should be used only in \"schoolEvil\" Stage!"
+		],
+		[
+			'Play Animation', 
+			"Plays an animation on a Character,\nonce the animation is completed,\nthe animation changes to Idle\n\n
+			Value 1: Animation to play.\n
+			Value 2: Character (Dad, BF, GF)"
+		],
+		[
+			'Camera Follow Pos', 
+			"Value 1: X\n
+			Value 2: Y\n\nThe camera won't change the follow point\nafter using this, for getting it back\nto normal, leave both values blank."
+		],
+		[
+			'Alt Idle Animation', 
+			"Sets a specified suffix after the idle animation name.\nYou can use this to trigger 'idle-alt' if you set\n
+			Value 2 to -alt\n\n
+			Value 1: Character to set (Dad, BF or GF)\nValue 2: New suffix (Leave it blank to disable)"
+		],
+		[
+			'Screen Shake', 
+			"Value 1: Camera shake\n
+			Value 2: HUD shake\n\nEvery value works as the following example: \"1, 0.05\".\nThe first number (1) is the duration.\nThe second number (0.05) is the intensity."
+		],
+		[
+			'Change Character', 
+			"Value 1: Character to change (Dad, BF, GF)\nValue 2: New character's name"
+		],
+		[
+			'Change Scroll Speed', 
+			"Value 1: Scroll Speed Multiplier (1 is default)\n
+			Value 2: Time it takes to change fully in seconds."
+		],
+		[
+			'Set Property', 
+			"Value 1: Variable name\n
+			Value 2: New value"
+		],
+		// Bad Ending events below
+		[
+			'Change Combo UI',
+			"Value 1: The prefix for the UI graphic\n(this can be a folder)\n
+			Value 2: The suffix for the UI graphic"
+		],
+		[
+			'Change Health Graphic',
+			"Value 1: The prefix and suffix for the graphic\n
+			Value 2: The offset of the graphic\n(both separated by commas)"
+		],
+		[
+			'Change Time Graphic',
+			"Value 1: The prefix and suffix for the graphic\n
+			Value 2: The offset of the graphic\n(both separated by commas)"
+		],
+		[
+			'Strumline Visibility',
+			"Value 1: Strumline to affect (dad, bf)\n
+			Value 2: How transparent the strum is"
+		],
+		[
+			'Change Strumline',
+			"Value 1: Strumline graphic to change to\n
+			Value 2: Whether or not to have it fade in"
+		],
+		[
+			'Change Camera Zoom',
+			"Value 1: Zoom for the camera to change to\n
+			Value 2: true/false to suddenly zoom, or\nnumerical value for duration"
+		]
 	];
 
 	var _file:FileReference;
@@ -153,6 +239,7 @@ class ChartingState extends MusicBeatState
 
 	var value1InputText:FlxUIInputText;
 	var value2InputText:FlxUIInputText;
+	var value3InputText:FlxUIInputText;
 	var currentSongName:String;
 	
 	var zoomTxt:FlxText;
@@ -305,7 +392,7 @@ class ChartingState extends MusicBeatState
 		
 		strumLineNotes = new FlxTypedGroup<StrumNote>();
 		for (i in 0...8){
-			var note:StrumNote = new StrumNote(GRID_SIZE * (i+1), strumLine.y, i % 4, 0);
+			var note:StrumNote = new StrumNote(GRID_SIZE * (i + 1), strumLine.y, i % 4, 0, '');
 			note.setGraphicSize(GRID_SIZE, GRID_SIZE);
 			note.updateHitbox();
 			note.playAnim('static', true);
@@ -636,6 +723,7 @@ class ChartingState extends MusicBeatState
 	var check_changeBPM:FlxUICheckBox;
 	var stepperSectionBPM:FlxUINumericStepper;
 	var check_altAnim:FlxUICheckBox;
+	var noteStyleSectionText:FlxUIInputText;
 
 	var sectionToCopy:Int = 0;
 	var notesCopied:Array<Dynamic>;
@@ -858,6 +946,9 @@ class ChartingState extends MusicBeatState
 		copyLastButton.setGraphicSize(80, 30);
 		copyLastButton.updateHitbox();
 
+		noteStyleSectionText = new FlxUIInputText(10, 330, 70, '', 8);
+		blockPressWhileTypingOn.push(noteStyleSectionText);
+
 		tab_group_section.add(stepperLength);
 		tab_group_section.add(stepperSectionBPM);
 		tab_group_section.add(check_mustHitSection);
@@ -872,6 +963,9 @@ class ChartingState extends MusicBeatState
 		tab_group_section.add(copyLastButton);
 		tab_group_section.add(duetButton);
 		tab_group_section.add(mirrorButton);
+
+		tab_group_section.add(noteStyleSectionText);
+		tab_group_section.add(new FlxText(noteStyleSectionText.x, noteStyleSectionText.y - 15, 0, 'Note Style:'));
 
 		UI_box.addGroup(tab_group_section);
 	}
@@ -991,7 +1085,7 @@ class ChartingState extends MusicBeatState
 		eventPushedMap = null;
 		#end
 
-		descText = new FlxText(20, 200, 0, eventStuff[0][0]);
+		descText = new FlxText(20, 240, 0, eventStuff[0][0]);
 
 		var leEvents:Array<String> = [];
 		for (i in 0...eventStuff.length) {
@@ -1005,8 +1099,7 @@ class ChartingState extends MusicBeatState
 			descText.text = eventStuff[selectedEvent][1];
 				if (curSelectedNote != null &&  eventStuff != null) {
 				if (curSelectedNote != null && curSelectedNote[2] == null){
-				curSelectedNote[1][curEventSelected][0] = eventStuff[selectedEvent][0];
-					
+					curSelectedNote[1][curEventSelected][0] = eventStuff[selectedEvent][0];
 				}
 				updateGrid();
 			}
@@ -1023,12 +1116,17 @@ class ChartingState extends MusicBeatState
 		value2InputText = new FlxUIInputText(20, 150, 100, "");
 		blockPressWhileTypingOn.push(value2InputText);
 
+		var text:FlxText = new FlxText(20, 170, 0, "Value 3:");
+		tab_group_event.add(text);
+		value3InputText = new FlxUIInputText(20, 190, 100, "");
+		blockPressWhileTypingOn.push(value3InputText);
+
 		// New event buttons
 		var removeButton:FlxButton = new FlxButton(eventDropDown.x + eventDropDown.width + 10, eventDropDown.y, '-', function()
 		{
 			if(curSelectedNote != null && curSelectedNote[2] == null) //Is event note
 			{
-				if(curSelectedNote[1].length < 2)
+				if(curSelectedNote[1].length < 3)
 				{
 					_song.events.remove(curSelectedNote);
 					curSelectedNote = null;
@@ -1040,8 +1138,10 @@ class ChartingState extends MusicBeatState
 
 				var eventsGroup:Array<Dynamic>;
 				--curEventSelected;
-				if(curEventSelected < 0) curEventSelected = 0;
-				else if(curSelectedNote != null && curEventSelected >= (eventsGroup = curSelectedNote[1]).length) curEventSelected = eventsGroup.length - 1;
+				if (curEventSelected < 0)
+					curEventSelected = 0;
+				else if (curSelectedNote != null && curEventSelected >= (eventsGroup = curSelectedNote[1]).length)
+					curEventSelected = eventsGroup.length - 1;
 				
 				changeEventSelected();
 				updateGrid();
@@ -1057,10 +1157,10 @@ class ChartingState extends MusicBeatState
 			
 		var addButton:FlxButton = new FlxButton(removeButton.x + removeButton.width + 10, removeButton.y, '+', function()
 		{
-			if(curSelectedNote != null && curSelectedNote[2] == null) //Is event note
+			if(curSelectedNote != null && curSelectedNote[3] == null) //Is event note
 			{
 				var eventsGroup:Array<Dynamic> = curSelectedNote[1];
-				eventsGroup.push(['', '', '']);
+				eventsGroup.push(['', '', '', '']);
 
 				changeEventSelected(1);
 				updateGrid();
@@ -1101,6 +1201,7 @@ class ChartingState extends MusicBeatState
 		tab_group_event.add(descText);
 		tab_group_event.add(value1InputText);
 		tab_group_event.add(value2InputText);
+		tab_group_event.add(value3InputText);
 		tab_group_event.add(eventDropDown);
 
 		UI_box.addGroup(tab_group_event);
@@ -1416,6 +1517,10 @@ class ChartingState extends MusicBeatState
 			if(sender == noteSplashesInputText) {
 				_song.splashSkin = noteSplashesInputText.text;
 			}
+			else if (sender == noteStyleSectionText)
+			{
+				_song.notes[curSection].noteStyle = noteStyleSectionText.text;
+			}
 			else if(curSelectedNote != null)
 			{
 				if(sender == value1InputText) {
@@ -1426,9 +1531,16 @@ class ChartingState extends MusicBeatState
 					curSelectedNote[1][curEventSelected][2] = value2InputText.text;
 					updateGrid();
 				}
-				else if(sender == strumTimeInputText) {
+				else if (sender == value3InputText)
+				{
+					curSelectedNote[1][curEventSelected][3] = value3InputText.text;
+					updateGrid();
+				}
+				else if (sender == strumTimeInputText)
+				{
 					var value:Float = Std.parseFloat(strumTimeInputText.text);
-					if(Math.isNaN(value)) value = 0;
+					if (Math.isNaN(value))
+						value = 0;
 					curSelectedNote[0] = value;
 					updateGrid();
 				}
@@ -2436,6 +2548,7 @@ class ChartingState extends MusicBeatState
 				}
 				value1InputText.text = curSelectedNote[1][curEventSelected][1];
 				value2InputText.text = curSelectedNote[1][curEventSelected][2];
+				value3InputText.text = curSelectedNote[1][curEventSelected][3];
 			}
 			strumTimeInputText.text = '' + curSelectedNote[0];
 		}
@@ -2519,7 +2632,8 @@ class ChartingState extends MusicBeatState
 				
 				if(note.y < -150) note.y = -150;
 
-				var text:String = 'Event: ' + note.eventName + ' (' + Math.floor(note.strumTime) + ' ms)' + '\nValue 1: ' + note.eventVal1 + '\nValue 2: ' + note.eventVal2;
+				var text:String = 'Event: ' + note.eventName + ' (' + Math.floor(note.strumTime) + ' ms)' + '\nValue 1: ' + note.eventVal1 + '\nValue 2: ' 
+					+ note.eventVal2 + '\nValue 3: ' + note.eventVal3;
 				if(note.eventLength > 1) text = note.eventLength + ' Events:\n' + note.eventName;
 
 				var daText:AttachedFlxText = new AttachedFlxText(0, 0, 400, text, 12);
@@ -2568,25 +2682,28 @@ class ChartingState extends MusicBeatState
 		var daSus:Dynamic = i[2];
 
 		var note:Note = new Note(daStrumTime, daNoteInfo % 4, null, null, true);
-		if(daSus != null) { //Common note
-			if(!Std.isOfType(i[3], String)) //Convert old note type to new note type format
+		if (daSus != null)
+		{ // Common note
+			if (!Std.isOfType(i[3], String)) // Convert old note type to new note type format
 			{
 				i[3] = noteTypeIntMap.get(i[3]);
 			}
-			if(i.length > 3 && (i[3] == null || i[3].length < 1))
+			if (i.length > 3 && (i[3] == null || i[3].length < 1))
 			{
 				i.remove(i[3]);
 			}
 			note.sustainLength = daSus;
 			note.noteType = i[3];
-		} else { //Event note
+		}
+		else { //Event note
 			note.loadGraphic(Paths.image('eventArrow'));
 			note.eventName = getEventName(i[1]);
 			note.eventLength = i[1].length;
-			if(i[1].length < 2)
+			if (i[1].length < 3)
 			{
 				note.eventVal1 = i[1][0][1];
 				note.eventVal2 = i[1][0][2];
+				note.eventVal3 = i[1][0][3];
 			}
 			note.noteData = -1;
 			daNoteInfo = -1;
@@ -2640,7 +2757,8 @@ class ChartingState extends MusicBeatState
 			gfSection: false,
 			sectionNotes: [],
 			typeOfSection: 0,
-			altAnim: false
+			altAnim: false,
+			noteStyle: ''
 		};
 
 		_song.notes.push(sec);
@@ -2773,7 +2891,8 @@ class ChartingState extends MusicBeatState
 			var event = eventStuff[Std.parseInt(eventDropDown.selectedId)][0];
 			var text1 = value1InputText.text;
 			var text2 = value2InputText.text;
-			_song.events.push([noteStrum, [[event, text1, text2]]]);
+			var text3 = value3InputText.text;
+			_song.events.push([noteStrum, [[event, text1, text2, text3]]]);
 			curSelectedNote = _song.events[_song.events.length - 1];
 			curEventSelected = 0;
 			changeEventSelected();
