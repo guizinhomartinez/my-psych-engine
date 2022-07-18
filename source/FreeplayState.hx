@@ -91,7 +91,9 @@ class FreeplayState extends MusicBeatState
 				addSong(song[0], i, song[1], FlxColor.fromRGB(colors[0], colors[1], colors[2]));
 			}
 		}
-		//WeekData.loadTheFirstEnabledMod();
+
+		//addSong("South Starcatcher", 0, 'gf', FlxColor.fromRGB(255, 255, 255));
+		WeekData.loadTheFirstEnabledMod();
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
 		bg.antialiasing = ClientPrefs.globalAntialiasing;
@@ -104,7 +106,7 @@ class FreeplayState extends MusicBeatState
 		for (i in 0...songs.length)
 		{
 			songText = new Alphabet(0, (70 * i) + 30, songs[i].songName, true, false);
-			songText.isMenuItem = true;
+			songText.isMenuItemCenterFreePlay = true;
 			songText.targetY = i;
 			grpSongs.add(songText);
 

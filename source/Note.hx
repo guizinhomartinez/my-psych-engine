@@ -152,6 +152,12 @@ class Note extends FlxSprite
 		if (prevNote == null)
 			prevNote = this;
 
+		if (noteStyle == '' || noteStyle == null)
+		{
+			if (PlayState.isPixelStage)
+				noteStyle = 'pixel';
+		}
+
 		this.noteStyle = noteStyle;
 		this.prevNote = prevNote;
 		isSustainNote = sustainNote;
@@ -164,9 +170,6 @@ class Note extends FlxSprite
 		if(!inEditor) this.strumTime += ClientPrefs.noteOffset;
 
 		this.noteData = noteData;
-
-		if (PlayState.isPixelStage)
-			noteStyle == 'pixel';
 
 		if(noteData > -1) {
 			texture = '';
@@ -219,7 +222,7 @@ class Note extends FlxSprite
 
 			offsetX -= width / 2;
 
-			if (noteStyle == 'pixel' || PlayState.isPixelStage)
+			if (noteStyle == 'pixel')
 				offsetX += 30;
 
 			if (prevNote.isSustainNote)
@@ -242,7 +245,7 @@ class Note extends FlxSprite
 					prevNote.scale.y *= PlayState.instance.songSpeed;
 				}
 
-				if(noteStyle == 'pixel' || PlayState.isPixelStage) {
+				if(noteStyle == 'pixel') {
 					prevNote.scale.y *= 1.19;
 					prevNote.scale.y *= (6 / height); //Auto adjust note size
 				}
@@ -286,7 +289,7 @@ class Note extends FlxSprite
 
 		var lastScaleY:Float = scale.y;
 		var blahblah:String = arraySkin.join('/');
-		if (noteStyle == 'pixel' || PlayState.isPixelStage) {
+		if (noteStyle == 'pixel') {
 			if (isSustainNote)
 			{
 				loadGraphic(Paths.image('pixelUI/' + blahblah + 'ENDS'));

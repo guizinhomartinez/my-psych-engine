@@ -1,5 +1,7 @@
 package;
 
+import openfl.display.BitmapData;
+//import flash.display.BitmapData;
 import flixel.graphics.FlxGraphic;
 #if desktop
 import Discord.DiscordClient;
@@ -36,6 +38,7 @@ import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxCollision;
 import flixel.util.FlxColor;
+import flixel.util.FlxGradient;
 import flixel.util.FlxSort;
 import flixel.util.FlxStringUtil;
 import flixel.util.FlxTimer;
@@ -67,6 +70,12 @@ import DialogueBoxPsych;
 import sys.io.File;
 import sys.FileSystem;
 #end
+
+import lime.app.Application;
+import openfl.events.UncaughtErrorEvent;
+import haxe.CallStack;
+import haxe.io.Path;
+import sys.io.Process;
 
 using StringTools;
 
@@ -100,10 +109,12 @@ class PlayState extends MusicBeatState
 	public var boyfriendMap:Map<String, Boyfriend> = new Map();
 	public var dadMap:Map<String, Character> = new Map();
 	public var gfMap:Map<String, Character> = new Map();
+	public var variables:Map<String, Dynamic> = new Map();
 	#else
 	public var boyfriendMap:Map<String, Boyfriend> = new Map<String, Boyfriend>();
 	public var dadMap:Map<String, Character> = new Map<String, Character>();
 	public var gfMap:Map<String, Character> = new Map<String, Character>();
+	public var variables:Map<String, Dynamic> = new Map<String, Dynamic>();
 	#end
 
 	public var BF_X:Float = 770;
@@ -112,6 +123,8 @@ class PlayState extends MusicBeatState
 	public var DAD_Y:Float = 100;
 	public var GF_X:Float = 400;
 	public var GF_Y:Float = 130;
+
+	var effectSprite:FloodFill;
 
 	public var songSpeedTween:FlxTween;
 	public var songSpeed(default, set):Float = 1;
@@ -158,8 +171,8 @@ class PlayState extends MusicBeatState
 	var pau:FlxSprite;
 
 	//Handles the new epic mega sexy cam code that i've done
-	private var camFollow:FlxPoint;
-	private var camFollowPos:FlxObject;
+	public var camFollow:FlxPoint;
+	public var camFollowPos:FlxObject;
 	private static var prevCamFollow:FlxPoint;
 	private static var prevCamFollowPos:FlxObject;
 
@@ -323,7 +336,11 @@ class PlayState extends MusicBeatState
 	public var scoreTxt:FlxText;
 	public var amongus:FlxText;
 	public var stuffTxt:FlxText;
+	var text:FlxText;
 	var cama:FlxSprite;
+
+	var NTYHI:Float = 0; //i dont remember what this stands for anymore lol
+	var maxNTYHI:Float = 2;
 
 	var isHidden:Bool = false;
 
@@ -1606,10 +1623,17 @@ class PlayState extends MusicBeatState
 		stuffTxt.setFormat(Paths.font("vcr.ttf"), 20, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		stuffTxt.scrollFactor.set();
 		stuffTxt.borderSize = 1.25;
-		stuffTxt.font = scoreTxt.font;
 		stuffTxt.alpha = 0;
 		stuffTxt.visible = ClientPrefs.stuffTxtVisibility;
 		add(stuffTxt);
+
+		text = new FlxText(0, 0, 0, "", 36);
+		text.setFormat(Paths.font("vcr.ttf"), 42, FlxColor.RED, CENTER, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		text.screenCenter();
+		text.x -= 250;
+		text.scrollFactor.set();
+		text.alpha = 0.0001;
+		add(text); 
 
 		strumLineNotes.cameras = [camHUD];
 		grpNoteSplashes.cameras = [camHUD];
@@ -1622,6 +1646,7 @@ class PlayState extends MusicBeatState
 		amongus.cameras = [camHUD];
 		botplayTxt.cameras = [camHUD];
 		stuffTxt.cameras = [camHUD];
+		text.cameras = [camHUD];
 		timeBar.cameras = [camHUD];
 		timeBarBG.cameras = [camHUD];
 		timeTxt.cameras = [camHUD];
@@ -3374,9 +3399,6 @@ class PlayState extends MusicBeatState
 
 	override public function update(elapsed:Float)
 	{
-		if (SONG.song.toLowerCase() == 'south starcatcher' && curStep >= 362) {
-			triggerEventNote("Change Combo UI", 'space/', '', '');
-		}
 		/*if (FlxG.keys.justPressed.U)
 		{
 			openfl.Lib.application.window.title = 'amongus';
@@ -3704,14 +3726,13 @@ class PlayState extends MusicBeatState
 				}
 			}
 		}
-
-		if (!ClientPrefs.boomEffect)
-			scoreTxt.text = 'Score: ' + songScore + ' | Misses: ' + songMisses + ' | Rating: ' + ratingName;
-		else
+		if (ClientPrefs.boomEffect)
 			scoreTxt.text = 'Score: ' + songScore + ' | Vine Booms: ' + songMisses + ' | Rating: ' + ratingName;
+		else
+			scoreTxt.text = 'Score: ' + songScore + ' | Combo Breaks: ' + songMisses + ' | Rating: ' + ratingName;
+
 		if(ratingName != '?'){
-			//scoreTxt.text += ' (' + Highscore.floorDecimal(ratingPercent * 100, 2) + '%)' + ' - ' + ratingFC + ' | ' + 'Health: ' + healthBar.percent + '%';
-			scoreTxt.text += ' (' + convertedAccDisplay + '%)' + ' - [' + ratingFC + ']';
+			scoreTxt.text += ' (' + convertedAccDisplay + '%)' + ' - ' + ratingFC;
 		}
 
 		if (ClientPrefs.kadeEngineTxt && !ClientPrefs.boomEffect){ //if its kade engine score and its NOT boom effect then
@@ -3729,11 +3750,27 @@ class PlayState extends MusicBeatState
 		if (ClientPrefs.healthVisible) // if health thing is ON then
 			scoreTxt.text += ' | ' + 'Health: ' + healthBar.percent + '%';
 
-		stuffTxt.text = 'Total Note Hits: ' + songHits + '\nMax Combo: ' + maxCombo + '\nCombo: ' + combo + '\nSicks: ' + sicks + '\nGoods: ' + goods +  '\nBads: ' + bads + '\nShits: ' + shits;
+		stuffTxt.text = 'Total Hits: ' + songHits + '\nMax Combo: ' + maxCombo + '\nCombo: ' + combo + '\nSicks: ' + sicks + '\nGoods: ' + goods +  '\nBads: ' + bads + '\nShits: ' + shits;
 		if (!ClientPrefs.boomEffect)
 			stuffTxt.text += '\nMisses: ' + songMisses + '\n';
 		else
 			stuffTxt.text += '\nVine Booms: ' + songMisses + '\n';
+
+		var N = NTYHI;
+
+		if (N == 0) {
+			text.text = 'you have: ';
+			text.text += '3';
+			text.text += " chances left...";
+		} else if (N == 1) {
+			text.text = 'you have: ';
+			text.text += '2';
+			text.text += " chances left...";
+		} else if (N == 2) {
+			text.text = 'you have: ';
+			text.text += '1';
+			text.text += " chance left...";
+		}
 
 		if(botplayTxt.visible) {
 			botplaySine += 180 * elapsed;
@@ -4086,6 +4123,23 @@ class PlayState extends MusicBeatState
 		}
 	}
 
+	function openPauseMenu()
+	{
+		persistentUpdate = false;
+		persistentDraw = true;
+		paused = true;
+
+		if(FlxG.sound.music != null) {
+			FlxG.sound.music.pause();
+			vocals.pause();
+		}
+		openSubState(new PauseSubState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
+
+		#if desktop
+		DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
+		#end
+	}
+
 	function openChartEditor()
 	{
 		persistentUpdate = false;
@@ -4105,32 +4159,7 @@ class PlayState extends MusicBeatState
 		{
 			var ret:Dynamic = callOnLuas('onGameOver', []);
 			if(ret != FunkinLua.Function_Stop) {
-				boyfriend.stunned = true;
-				deathCounter++;
-
-				paused = true;
-
-				vocals.stop();
-				FlxG.sound.music.stop();
-
-				persistentUpdate = false;
-				persistentDraw = false;
-				for (tween in modchartTweens) {
-					tween.active = true;
-				}
-				for (timer in modchartTimers) {
-					timer.active = true;
-				}
-				openSubState(new GameOverSubstate(boyfriend.getScreenPosition().x - boyfriend.positionArray[0], boyfriend.getScreenPosition().y - boyfriend.positionArray[1], camFollowPos.x, camFollowPos.y));
-
-				// MusicBeatState.switchState(new GameOverState(boyfriend.getScreenPosition().x, boyfriend.getScreenPosition().y));
-				
-				#if desktop
-				// Game Over doesn't get his own variable because it's only used here
-				DiscordClient.changePresence("Game Over - " + detailsText, SONG.song + " (" + storyDifficultyText + ")", iconP2.getCharacter());
-				#end
-				isDead = true;
-				return true;
+				openPauseMenu();
 			}
 		}
 		return false;
@@ -4469,8 +4498,6 @@ class PlayState extends MusicBeatState
 					val2 = 1;
 				else if (val2 == 0)
 					val2 = 0.0001;
-				else if (Math.isNaN(val3) || value3 == '')
-					val3 = 0.01;
 
 				trace(value1 + ' & ' + value2 + ' & ' + value3);
 
@@ -5197,13 +5224,13 @@ BUT NOW THE SONG LIST HAS MY TUNE
 
 		var seperatedScore:Array<Int> = [];
 
-		if(combo >= 1000) {
+		if (combo >= 1000) {
 			seperatedScore.push(Math.floor(combo / 1000) % 10);
-		}if (combo >= 100){
+		} if (combo >= 100) {
 			seperatedScore.push(Math.floor(combo / 100) % 10);
-		}if (combo >= 10){
+		} if (combo >= 10) {
 			seperatedScore.push(Math.floor(combo / 10) % 10);
-		}if (combo >= 0){
+		} if (combo >= 0) {
 			seperatedScore.push(combo % 10);
 		}
 
@@ -5292,7 +5319,6 @@ BUT NOW THE SONG LIST HAS MY TUNE
 
 				// heavily based on my own code LOL if it aint broke dont fix it
 				var pressNotes:Array<Note> = [];
-				//var notesDatas:Array<Int> = [];
 				var notesStopped:Bool = false;
 
 				var sortedNotesList:Array<Note> = [];
@@ -5610,6 +5636,14 @@ BUT NOW THE SONG LIST HAS MY TUNE
 			note.destroy();
 		}
 	}
+	var errMsg:String = "";
+
+	function disappear() {
+		new FlxTimer().start(2, function(tmr:FlxTimer)
+		{
+			FlxTween.tween(text, {alpha: 0}, 0.2);
+		});
+	}
 
 	function goodNoteHit(note:Note):Void
 	{
@@ -5630,6 +5664,29 @@ BUT NOW THE SONG LIST HAS MY TUNE
 
 				switch(note.noteType) {
 					case 'Hurt Note': //Hurt note
+						NTYHI++;
+						/*if (NTYHI == 2)
+							NTYHI = 0;*/
+						if (NTYHI > 0) {
+							FlxTween.tween(text, {alpha: 1}, 0.1, {
+								onComplete: function(twn:FlxTween)
+								{
+									disappear();
+								}
+							});
+						}
+
+						if (NTYHI > 3)
+							NTYHI == 0;
+
+						if (NTYHI > maxNTYHI) {
+							errMsg += "you hit this note too many times man,\n\n> press OK to close the game";
+							Application.current.window.alert(errMsg, "!");
+							DiscordClient.shutdown();
+							trace("ded");
+							Sys.exit(1);
+						}
+
 						if(boyfriend.animation.getByName('hurt') != null) {
 							boyfriend.playAnim('hurt', true);
 							boyfriend.specialAnim = true;
@@ -5651,8 +5708,8 @@ BUT NOW THE SONG LIST HAS MY TUNE
 				combo += 1;
 				popUpScore(note);
 				if(combo > 9999) combo = 9999;
+				health += note.hitHealth;
 			}
-			health += note.hitHealth;
 
 			if(!note.noAnimation && !sleeping) {
 				var daAlt = '';
@@ -6077,12 +6134,10 @@ BUT NOW THE SONG LIST HAS MY TUNE
 		}
 	}
 
-	private var preventLuaRemove:Bool = false;
 	override function destroy() {
-		preventLuaRemove = true;
-		for (i in 0...luaArray.length) {
-			luaArray[i].call('onDestroy', []);
-			luaArray[i].stop();
+		for (lua in luaArray) {
+			lua.call('onDestroy', []);
+			lua.stop();
 		}
 		luaArray = [];
 
@@ -6091,6 +6146,9 @@ BUT NOW THE SONG LIST HAS MY TUNE
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_DOWN, onKeyPress);
 			FlxG.stage.removeEventListener(KeyboardEvent.KEY_UP, onKeyRelease);
 		}
+		#if hscript
+		FunkinLua.haxeInterp = null;
+		#end
 		super.destroy();
 	}
 
@@ -6132,7 +6190,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 
 
 	public function removeLua(lua:FunkinLua) {
-		if(luaArray != null && !preventLuaRemove) {
+		if(luaArray != null) {
 			luaArray.remove(lua);
 		}
 	}
@@ -6155,8 +6213,8 @@ BUT NOW THE SONG LIST HAS MY TUNE
 			if (curStep == 1) {
 				triggerEventNote("Change Combo UI", 'starcatcher/', '');
 			} if (curStep == 629) {
-				triggerEventNote("Strumline Visibility", 'dad', '0', '0.25');
-				triggerEventNote("Strumline Visibility", 'bf', '0', '0.25');
+				triggerEventNote("Strumline Visibility", 'dad', '0', '0.35');
+				triggerEventNote("Strumline Visibility", 'bf', '0', '0.35');
 				black.alpha = 1;
 				black2.alpha = 1;
 				black3.alpha = 1;
@@ -6190,8 +6248,7 @@ BUT NOW THE SONG LIST HAS MY TUNE
 					defaultCamZoom = 1.2;
 				});
 				FlxTween.tween(camHUD, {alpha: 0}, 0.55, {ease: FlxEase.quadInOut});
-			}
-			if (curStep == 380) {
+			} if (curStep == 380) {
 				tutorialex = true;
 				cameraSpeed = 2;
 				butter = true;
@@ -6210,13 +6267,11 @@ BUT NOW THE SONG LIST HAS MY TUNE
 				});
 
 				return trace('look the stuff work :0');
-			}
-			if (curStep == 381) {
+			} if (curStep == 381) {
 				dad.x -= 150;
 				boyfriend.x += 131;
 				boyfriend.y += 90;
-			}
-			if (curStep == 767) {
+			} if (curStep == 767) {
 				FlxTween.tween(camHUD, {alpha: 0}, 0.4, {ease: FlxEase.quadInOut});
 				FlxTween.tween(camGame, {zoom: 1.2}, 0.5, {ease: FlxEase.quadIn});
 				new FlxTimer().start(0.5, function(tmr:FlxTimer)
@@ -6225,6 +6280,14 @@ BUT NOW THE SONG LIST HAS MY TUNE
 				});
 			}
 		}
+
+		/*if (SONG.song.toLowerCase() == 'dad battle') {
+			if (curStep == 1) {
+				var effectBitmapData:BitmapData = OpenFlAssets.getBitmapData("assets/images/Menu_Tracks.png");
+				effectSprite = new FloodFill(boyfriend.x, FlxG.height * .5 - effectBitmapData.height * .5, effectBitmapData, effectBitmapData.width, effectBitmapData.height, 1, .01);
+				add(effectSprite);
+			}
+		}*/
 
 		lastStepHit = curStep;
 		setOnLuas('curStep', curStep);

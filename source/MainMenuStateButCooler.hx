@@ -27,6 +27,7 @@ using StringTools;
 class MainMenuStateButCooler extends MusicBeatState
 {
 	public static var psychEngineVersion:String = '0.6.0'; //This is also used for Discord RPC
+	public static var theTimesIAlmostGaveUpOnThisProject = '1029102190219210920190210129';
 	public static var curSelected:Int = 0;
 
 	var bg:FlxSprite;
@@ -126,7 +127,7 @@ class MainMenuStateButCooler extends MusicBeatState
 		hahadumb.scrollFactor.set();
 		hahadumb.antialiasing = ClientPrefs.globalAntialiasing;
 		hahadumb.updateHitbox();
-		add(hahadumb);
+		//add(hahadumb);
 
 		camFollow = new FlxObject(0, 0, 1, 1);
 		camFollowPos = new FlxObject(0, 0, 1, 1);
@@ -144,6 +145,7 @@ class MainMenuStateButCooler extends MusicBeatState
 			aiai.ID = i;
 			aiai.antialiasing = ClientPrefs.globalAntialiasing;
 			aiai.updateHitbox();
+			aiai.alpha = 0;
 			haha.add(aiai);
 		}
 
@@ -197,6 +199,10 @@ class MainMenuStateButCooler extends MusicBeatState
 		var versionShit:FlxText = new FlxText(1000, FlxG.height - 44, 0, "Psych Engine v" + psychEngineVersion, 12);
 		versionShit.scrollFactor.set();
 		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(versionShit);
+		var versionShit:FlxText = new FlxText(700, FlxG.height - 64, 0, "The times I almost gave up on this project: " + theTimesIAlmostGaveUpOnThisProject, 12);
+		versionShit.scrollFactor.set();
+		versionShit.setFormat("VCR OSD Mono", 16, FlxColor.RED, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(versionShit);
 		var versionShit:FlxText = new FlxText(1000, FlxG.height - 24, 0, "Friday Night Funkin' v" + Application.current.meta.get('version'), 12);
 		versionShit.scrollFactor.set();

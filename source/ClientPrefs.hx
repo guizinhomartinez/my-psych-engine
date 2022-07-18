@@ -40,6 +40,7 @@ class ClientPrefs {
 	public static var healthVisible:Bool = true;
 	public static var kadeEngineTxt:Bool = false;
 	public static var beatifulHud:Bool = true;
+	public static var checkForUpdates:Bool = true;
 	public static var gameplaySettings:Map<String, Dynamic> = [
 		'scrollspeed' => 1.0,
 		'scrolltype' => 'multiplicative', 
@@ -118,6 +119,7 @@ class ClientPrefs {
 		FlxG.save.data.healthVisible = healthVisible;
 		FlxG.save.data.kadeEngineTxt = kadeEngineTxt;
 		FlxG.save.data.beatifulHud = beatifulHud;
+		FlxG.save.data.checkForUpdates = checkForUpdates;
 		//FlxG.save.data.cursing = cursing;
 		//FlxG.save.data.violence = violence;
 		FlxG.save.data.camZooms = camZooms;
@@ -176,8 +178,10 @@ class ClientPrefs {
 		if (FlxG.save.data.stuffTxtVisibility != null){
 			stuffTxtVisibility = FlxG.save.data.stuffTxtVisibility;
 		}
-		if (FlxG.save.data.beatifulHud != null) { beatifulHud = FlxG.save.data.beatifulHud; }
-
+		if (FlxG.save.data.beatifulHud != null)
+		{
+			beatifulHud = FlxG.save.data.beatifulHud;
+		}
 		if(FlxG.save.data.opponentStrums != null) {
 			opponentStrums = FlxG.save.data.opponentStrums;
 		}
@@ -217,6 +221,10 @@ class ClientPrefs {
 		}*/
 		if(FlxG.save.data.camZooms != null) {
 			camZooms = FlxG.save.data.camZooms;
+		}
+		if (FlxG.save.data.checkForUpdates != null)
+		{
+			checkForUpdates = FlxG.save.data.checkForUpdates;
 		}
 		if(FlxG.save.data.hideHud != null) {
 			hideHud = FlxG.save.data.hideHud;
