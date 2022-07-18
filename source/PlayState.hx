@@ -6281,7 +6281,8 @@ BUT NOW THE SONG LIST HAS MY TUNE
 			}
 		}
 
-		/*if (SONG.song.toLowerCase() == 'dad battle') {
+		/*if (SONG.song.toLowerCase() == 'dad battle') 
+		{
 			if (curStep == 1) {
 				var effectBitmapData:BitmapData = OpenFlAssets.getBitmapData("assets/images/Menu_Tracks.png");
 				effectSprite = new FloodFill(boyfriend.x, FlxG.height * .5 - effectBitmapData.height * .5, effectBitmapData, effectBitmapData.width, effectBitmapData.height, 1, .01);
